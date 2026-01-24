@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sindhi Namkeen & Dry Fruits | Always Fresh, Crispy & Crunchy</title>
+    <meta name="description"
+        content="Premium Indian Namkeen and Dry Fruits. Always Fresh, Crispy & Crunchy. Visit us at Shop No. C-11, G3 Qutub Plaza, DLF Phase-1, Gurugram.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <!-- Header with Pill Navigation -->
+    <header class="header">
+        <div class="header-container">
+            <a href="#home" class="logo">
+                <span class="logo-text">Sindhi</span>
+                <span class="logo-tagline">Namkeen & Dry Fruits</span>
+            </a>
+
+            <!-- Pill Navigation -->
+            <nav class="pill-nav" id="pillNav">
+                <div class="pill-indicator" id="pillIndicator"></div>
+                <a href="#home" class="pill-nav-item active" data-section="home">Home</a>
+                <a href="#products" class="pill-nav-item" data-section="products">Products</a>
+                <a href="#about" class="pill-nav-item" data-section="about">About</a>
+                <a href="#contact" class="pill-nav-item" data-section="contact">Contact</a>
+            </nav>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <nav class="mobile-nav" id="mobileNav">
+            <a href="#home" class="mobile-nav-item">Home</a>
+            <a href="#products" class="mobile-nav-item">Products</a>
+            <a href="#about" class="mobile-nav-item">About</a>
+            <a href="#contact" class="mobile-nav-item">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-badge">Est. Since Years of Trust</div>
+            <h1 class="hero-title">
+                <span class="title-line">Sindhi</span>
+                <span class="title-accent">Namkeen & Dry Fruits</span>
+            </h1>
+            <p class="hero-tagline">Always Fresh, Crispy & Crunchy</p>
+            <p class="hero-description">Premium quality Indian snacks and dry fruits, crafted with tradition and served
+                with love.</p>
+            <div class="hero-cta">
+                <a href="#products" class="btn btn-primary">Explore Products</a>
+                <a href="#contact" class="btn btn-secondary">Visit Store</a>
+            </div>
+        </div>
+        <div class="hero-scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Our Collection</span>
+                <h2 class="section-title">Premium Products</h2>
+                <p class="section-subtitle">Handpicked selections of the finest namkeen and dry fruits</p>
+
+                <!-- Filter Buttons -->
+                <div class="filter-container">
+                    <button class="filter-btn active" data-filter="All">All</button>
+                    <button class="filter-btn" data-filter="Sweet">Sweet</button>
+                    <button class="filter-btn" data-filter="Namkeen">Namkeen</button>
+                    <button class="filter-btn" data-filter="Dry Fruits">Dry Fruits</button>
+                </div>
+            </div>
+
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be dynamically loaded here -->
+            </div>
+
+            <div id="pagination" class="pagination-container">
+                <!-- Pagination controls will be added here if needed -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <span class="section-label">Our Story</span>
+                    <h2 class="section-title">A Legacy of Quality & Trust</h2>
+                    <p class="about-text">
+                        At Sindhi Namkeen & Dry Fruits, we take pride in offering the finest quality Indian snacks and
+                        dry fruits.
+                        Our commitment to freshness, authenticity, and customer satisfaction has made us a trusted name
+                        among
+                        snack lovers.
+                    </p>
+                    <p class="about-text">
+                        Every product we offer is carefully selected and prepared to ensure you get the best taste and
+                        quality.
+                        From traditional namkeen recipes passed down through generations to premium dry fruits sourced
+                        from
+                        the finest orchards, we bring you the authentic flavors of India.
+                    </p>
+
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                            </div>
+                            <div class="feature-text">
+                                <h4>Quality Assured</h4>
+                                <p>Premium ingredients only</p>
+                            </div>
+                        </div>
+                        <div class="about-feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                            </div>
+                            <div class="feature-text">
+                                <h4>Always Fresh</h4>
+                                <p>Made fresh daily</p>
+                            </div>
+                        </div>
+                        <div class="about-feature">
+                            <div class="feature-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path
+                                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div class="feature-text">
+                                <h4>Made with Love</h4>
+                                <p>Traditional recipes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="about-image-wrapper">
+                        <img src="assets/hero.png" alt="Our Store" class="about-image">
+                    </div>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <span class="stat-number">100+</span>
+                            <span class="stat-label">Products</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">1000+</span>
+                            <span class="stat-label">Happy Customers</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Get in Touch</span>
+                <h2 class="section-title">Visit Our Store</h2>
+                <p class="section-subtitle">We'd love to serve you the finest snacks and dry fruits</p>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Store Address</h4>
+                            <p>Shop No. C-11, G3 Qutub Plaza</p>
+                            <p>DLF Phase-1, Gurugram</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                <line x1="8" y1="21" x2="16" y2="21"></line>
+                                <line x1="12" y1="17" x2="12" y2="21"></line>
+                            </svg>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Follow Us</h4>
+                            <a href="https://www.instagram.com/sindhi_namkeen_dry_fruits_/" target="_blank"
+                                rel="noopener" class="social-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                                @sindhi_namkeen_dry_fruits_
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Store Hours</h4>
+                            <p>Monday - Saturday: 10 AM - 9 PM</p>
+                            <p>Sunday: 11 AM - 8 PM</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-map">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3506.2233913121413!2d77.0897!3d28.4697!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d193e3b989e6b%3A0x7d7c1cc7e0e2e8b!2sQutub%20Plaza%2C%20DLF%20Phase%201%2C%20Sector%2028%2C%20Gurugram%2C%20Haryana!5e0!3m2!1sen!2sin!4v1705762000000!5m2!1sen!2sin"
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3 class="footer-logo">Sindhi Namkeen & Dry Fruits</h3>
+                    <p class="footer-tagline">Always Fresh, Crispy & Crunchy</p>
+                </div>
+
+                <div class="footer-links">
+                    <a href="#home">Home</a>
+                    <a href="#products">Products</a>
+                    <a href="#about">About</a>
+                    <a href="#contact">Contact</a>
+                </div>
+
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/sindhi_namkeen_dry_fruits_/" target="_blank" rel="noopener"
+                        class="social-icon" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-address">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Shop No. C-11, G3 Qutub Plaza, DLF Phase-1, Gurugram
+                </div>
+                <p class="copyright">&copy; 2026 Sindhi Namkeen & Dry Fruits. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/utils/errorhandler.js"></script>
+    <script src="js/services/storage.js"></script>
+    <script src="js/services/data.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
