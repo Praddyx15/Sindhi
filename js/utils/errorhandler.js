@@ -16,7 +16,10 @@ window.SindhiApp.Utils = window.SindhiApp.Utils || {};
         window.onerror = function (msg, url, line, col, error) {
             const errorMessage = `Error: ${msg} \nAt: ${url}:${line}:${col}`;
             console.error(errorMessage);
-            showErrorToast(msg);
+            // Ignore generic cross-origin script error notifications in UI toast
+            if (msg !== 'Script error.') {
+                showErrorToast(msg);
+            }
             return false; // Let default handler run too
         };
 

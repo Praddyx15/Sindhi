@@ -125,32 +125,47 @@ window.SindhiApp = window.SindhiApp || {};
     }
 
     function renderInventory(products) {
-        els.inventoryBody.innerHTML = products.map(p => `
+        els.inventoryBody.innerHTML = products.map(p => {
+            const stockBadge = p.inStock !== false
+                ? '<span class="badge-stock stock-in">In Stock</span>'
+                : '<span class="badge-stock stock-out">Sold Out</span>';
+
+            return `
             <tr>
                 <td>#${p.id}</td>
                 <td><img src="${p.image}" style="width: 40px; height: 40px; border-radius: 4px; object-fit: cover;"></td>
                 <td><strong>${p.name}</strong></td>
                 <td><span style="padding: 2px 8px; background: #eee; border-radius: 12px; font-size: 0.8em;">${p.category}</span></td>
                 <td>₹${p.price}</td>
+                <td>${stockBadge}</td>
                 <td>
                     <button class="action-btn btn-edit" onclick="editProduct(${p.id})">Edit</button>
                     <button class="action-btn btn-delete" onclick="deleteProduct(${p.id})">Delete</button>
                 </td>
             </tr>
-        `).join('');
+        `}).join('');
     }
 
     function renderOrders(orders) {
         els.ordersBody.innerHTML = orders.map(o => {
             let color = o.status === 'Delivered' ? '#5cb85c' : o.status === 'Processing' ? '#5bc0de' : '#f0ad4e';
+
+            // Handle Customer Name (Support both string and object)
+            const customerName = typeof o.customer === 'object' ? o.customer.name : o.customer;
+
+            // Handle Items Summary
+            const itemsSummary = Array.isArray(o.items)
+                ? o.items.map(i => `${i.quantity}x ${i.name}`).join(', ')
+                : o.items;
+
             return `
                 <tr>
-                    <td>#${o.id}</td>
-                    <td>${o.customer}</td>
-                    <td>${o.items}</td>
+                    <td>#${o.id.toString().slice(-6)}</td> <!-- Short ID -->
+                    <td>${customerName}</td>
+                    <td><div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${itemsSummary}">${itemsSummary}</div></td>
                     <td>₹${o.total}</td>
                     <td><span style="padding: 2px 8px; background: ${color}; color: white; border-radius: 4px; font-size: 0.8em;">${o.status}</span></td>
-                    <td><button class="action-btn" onclick="alert('Details coming soon')">View</button></td>
+                    <td><button class="action-btn" onclick="alert('Full Details:\\nCustomer: ${customerName}\\nItems: ${itemsSummary}\\nDelivery: ${o.delivery}')">View</button></td>
                 </tr>
             `;
         }).join('');
@@ -166,6 +181,7 @@ window.SindhiApp = window.SindhiApp || {};
         const nameInput = document.getElementById('prodName');
         const catInput = document.getElementById('prodCategory');
         const priceInput = document.getElementById('prodPrice');
+        const stockInput = document.getElementById('prodStock');
 
         if (product) {
             title.innerText = 'Edit Product';
@@ -174,6 +190,7 @@ window.SindhiApp = window.SindhiApp || {};
             nameInput.value = product.name;
             catInput.value = product.category;
             priceInput.value = product.price;
+            stockInput.checked = product.inStock !== false;
         } else {
             title.innerText = 'Add New Product';
             editingProductId = null;
@@ -181,6 +198,7 @@ window.SindhiApp = window.SindhiApp || {};
             nameInput.value = '';
             catInput.value = 'Namkeen';
             priceInput.value = '';
+            stockInput.checked = true;
         }
         els.productModal.classList.add('active');
     }
@@ -207,20 +225,42 @@ window.SindhiApp = window.SindhiApp || {};
         const name = document.getElementById('prodName').value;
         const category = document.getElementById('prodCategory').value;
         const price = parseInt(document.getElementById('prodPrice').value);
-
-        // Demo image logic
-        let image = 'assets/namkeen.png';
-        if (category === 'Sweet') image = 'assets/hero.png';
-        if (category === 'Dry Fruits') image = 'assets/dryfruits.png';
-
-        const data = { name, category, price, image, rating: 4.5, reviews: 0 };
+        const inStock = document.getElementById('prodStock').checked;
 
         if (editingProductId) {
-            data.id = editingProductId;
-            // Since we don't have a real update method in Service that merges, we can use our updated logic
-            ProductService.update(data);
+            // MERGE Logic
+            const existing = ProductService.getAll().find(p => p.id === editingProductId);
+            if (existing) {
+                const updatedProduct = {
+                    ...existing,
+                    name,
+                    category,
+                    price,
+                    inStock
+                };
+                ProductService.update(updatedProduct);
+            }
         } else {
-            ProductService.add(data);
+            // New Product Logic
+            let image = 'assets/namkeen.png';
+            if (category.toLowerCase().includes('fruit') ||
+                category.toLowerCase().includes('seeds') ||
+                category.toLowerCase().includes('dates')) {
+                image = 'assets/dryfruits.png';
+            } else if (category.toLowerCase().includes('cookies')) {
+                image = 'assets/hero.png';
+            }
+
+            const newProduct = {
+                name,
+                category,
+                price,
+                image,
+                inStock,
+                rating: 4.5,
+                reviews: 0
+            };
+            ProductService.add(newProduct);
         }
 
         closeModal();

@@ -77,6 +77,7 @@
                             <th>Name</th>
                             <th>Category</th>
                             <th>Price</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -123,14 +124,37 @@
                 <div class="form-group">
                     <label>Category</label>
                     <select id="prodCategory" class="form-control">
-                        <option value="Namkeen">Namkeen</option>
-                        <option value="Sweet">Sweet</option>
-                        <option value="Dry Fruits">Dry Fruits</option>
+                        <option value="Chips & Wafers">Chips & Wafers</option>
+                        <option value="Dry Fruit">Dry Fruit</option>
+                        <option value="Golgappe">Golgappe</option>
+                        <option value="Khakhra">Gujarati Khakhra</option>
+                        <option value="Healthy Snacks">Healthy Snacks</option>
+                        <option value="Imported Dry Fruit">Imported Dry Fruit</option>
+                        <option value="Important Dry Fruits">Important Dry Fruits</option>
+                        <option value="Imported Dates">Imported Dates</option>
+                        <option value="Spices (Masale)">Spices (Masale)</option>
+                        <option value="Mouth Freshener">Mouth Freshener</option>
+                        <option value="Navratra Special">Navratra Special</option>
+                        <option value="Papad & Badiya">Papad & Badiya</option>
+                        <option value="Makhana">Makhana</option>
+                        <option value="Regular Namkeen">Regular Namkeen</option>
+                        <option value="Roasted Chips">Roasted Chips</option>
+                        <option value="Seeds">Seeds</option>
+                        <option value="Special Achar (Pickle)">Special Achar (Pickle)</option>
+                        <option value="Special Cookies">Special Cookies</option>
+                        <option value="Special Matthi">Special Matthi</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Price (₹)</label>
                     <input type="number" id="prodPrice" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label"
+                        style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="prodStock" checked>
+                        <span>In Stock</span>
+                    </label>
                 </div>
                 <div class="form-group" style="text-align: right; margin-top: 1rem;">
                     <button type="button" class="btn btn-secondary" style="color: #666; border-color: #ccc;"

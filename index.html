@@ -80,6 +80,18 @@
     <!-- Products Section -->
     <section class="products" id="products">
         <div class="container">
+            <!-- Search Bar -->
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search for namkeen, sweets, or dry fruits..."
+                    class="search-input">
+                <button class="search-btn" aria-label="Search">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+            </div>
+
             <div class="section-header">
                 <span class="section-label">Our Collection</span>
                 <h2 class="section-title">Premium Products</h2>
@@ -88,9 +100,25 @@
                 <!-- Filter Buttons -->
                 <div class="filter-container">
                     <button class="filter-btn active" data-filter="All">All</button>
-                    <button class="filter-btn" data-filter="Sweet">Sweet</button>
-                    <button class="filter-btn" data-filter="Namkeen">Namkeen</button>
-                    <button class="filter-btn" data-filter="Dry Fruits">Dry Fruits</button>
+                    <button class="filter-btn" data-filter="Chips & Wafers">Chips & Wafers</button>
+                    <button class="filter-btn" data-filter="Dry Fruit">Dry Fruit</button>
+                    <button class="filter-btn" data-filter="Golgappe">Golgappe</button>
+                    <button class="filter-btn" data-filter="Khakhra">Gujarati Khakhra</button>
+                    <button class="filter-btn" data-filter="Healthy Snacks">Healthy Snacks</button>
+                    <button class="filter-btn" data-filter="Imported Dry Fruit">Imported Dry Fruit</button>
+                    <button class="filter-btn" data-filter="Important Dry Fruits">Important Dry Fruits</button>
+                    <button class="filter-btn" data-filter="Imported Dates">Imported Dates</button>
+                    <button class="filter-btn" data-filter="Spices (Masale)">Spices</button>
+                    <button class="filter-btn" data-filter="Mouth Freshener">Mouth Freshener</button>
+                    <button class="filter-btn" data-filter="Navratra Special">Navratri</button>
+                    <button class="filter-btn" data-filter="Papad & Badiya">Papad</button>
+                    <button class="filter-btn" data-filter="Makhana">Makhana</button>
+                    <button class="filter-btn" data-filter="Regular Namkeen">Namkeens</button>
+                    <button class="filter-btn" data-filter="Roasted Chips">Roasted Snacks</button>
+                    <button class="filter-btn" data-filter="Seeds">Seeds</button>
+                    <button class="filter-btn" data-filter="Special Achar (Pickle)">Pickles</button>
+                    <button class="filter-btn" data-filter="Special Cookies">Cookies</button>
+                    <button class="filter-btn" data-filter="Special Matthi">Matthi</button>
                 </div>
             </div>
 
@@ -266,12 +294,7 @@
                     <p class="footer-tagline">Always Fresh, Crispy & Crunchy</p>
                 </div>
 
-                <div class="footer-links">
-                    <a href="#home">Home</a>
-                    <a href="#products">Products</a>
-                    <a href="#about">About</a>
-                    <a href="#contact">Contact</a>
-                </div>
+
 
                 <div class="footer-social">
                     <a href="https://www.instagram.com/sindhi_namkeen_dry_fruits_/" target="_blank" rel="noopener"
@@ -286,12 +309,20 @@
             </div>
 
             <div class="footer-bottom">
-                <div class="footer-address">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                        <circle cx="12" cy="10" r="3"></circle>
-                    </svg>
-                    Shop No. C-11, G3 Qutub Plaza, DLF Phase-1, Gurugram
+                <div class="footer-info-grid">
+                    <div class="footer-address">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        Shop No. C-11, G3 Qutub Plaza, DLF Phase-1, Gurugram
+                    </div>
+                    <div class="footer-fssai">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/FSSAI_logo.svg/1200px-FSSAI_logo.svg.png"
+                            alt="FSSAI"
+                            style="height: 25px; vertical-align: middle; margin-right: 10px; filter: grayscale(1) brightness(1.5);">
+                        <span>Ref. No. 30221217112271318 (Registration in Process)</span>
+                    </div>
                 </div>
                 <p class="copyright">&copy; 2026 Sindhi Namkeen & Dry Fruits. All rights reserved.</p>
             </div>
@@ -299,6 +330,130 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="js/utils/errorhandler.js"></script>
+    <script src="js/services/storage.js"></script>
+    <script src="js/services/data.js"></script>
+    <script src="js/main.js"></script>
+    <!-- Cart Floating Action Button -->
+    <button class="cart-fab" id="cartFab" aria-label="View Cart">
+        <div class="cart-icon-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="cart-badge" id="cartBadge">0</span>
+        </div>
+    </button>
+
+    <!-- Cart Modal -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="modal-content cart-modal">
+            <div class="modal-header">
+                <h3>Your Cart</h3>
+                <button class="close-modal" id="closeCart">&times;</button>
+            </div>
+            <div class="modal-body" id="cartItems">
+                <!-- Cart items will be rendered here -->
+                <div class="empty-cart-message">Your cart is empty</div>
+            </div>
+            <div class="modal-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cartTotal">₹0</span>
+                </div>
+                <button class="btn btn-primary btn-block" id="checkoutBtn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal-content checkout-modal">
+            <div class="modal-header">
+                <h3>Checkout</h3>
+                <button class="close-modal" id="closeCheckout">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="checkoutForm">
+                    <div class="form-group">
+                        <label for="cxName">Full Name</label>
+                        <input type="text" id="cxName" required class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="cxPhone">Phone Number</label>
+                        <input type="tel" id="cxPhone" required class="form-control" pattern="[0-9]{10}">
+                    </div>
+                    <div class="form-group">
+                        <label for="cxAddress">Delivery Address</label>
+                        <textarea id="cxAddress" required class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="delivery-options">
+                        <h4>Delivery Options</h4>
+                        <div class="option-group">
+                            <label class="radio-label">
+                                <input type="radio" name="deliverySpeed" value="standard" checked>
+                                Standard Delivery
+                                <small>(3 Hours / 6 Hours / 9 Hours)</small>
+                            </label>
+
+                            <!-- Detailed Slot Selection (Visible if Standard is checked) -->
+                            <div class="slot-selection">
+                                <label><input type="radio" name="timeSlot" value="3hr" checked> 3 Hours</label>
+                                <label><input type="radio" name="timeSlot" value="6hr"> 6 Hours</label>
+                                <label><input type="radio" name="timeSlot" value="9hr"> 9 Hours</label>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <label class="radio-label">
+                                <input type="radio" name="deliverySpeed" value="relaxed">
+                                Relaxed Delivery (Next Day)
+                                <small>Orders after 3 PM delivered tomorrow</small>
+                            </label>
+                        </div>
+
+                        <div class="option-group express-option">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="expressDelivery">
+                                <strong>Express Delivery (1 Hour)</strong>
+                                <span class="badge badge-warning">Extra Charges Apply</span>
+                            </label>
+                            <div id="expressSurcharge" class="surcharge-info" style="display:none;">
+                                + ₹<span id="surchargeAmount">50</span> Surcharge
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-summary-mini">
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="checkoutSubtotal">₹0</span>
+                        </div>
+                        <div class="summary-row" id="checkoutSurchargeRow" style="display:none;">
+                            <span>Express Surcharge:</span>
+                            <span>₹50</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total Payable:</span>
+                            <span id="checkoutFinalTotal">₹0</span>
+                        </div>
+                        <div class="payment-note">
+                            * Payment Method: Cash on Delivery (COD) Only
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="backToCart">Back</button>
+                <button class="btn btn-primary" id="placeOrderBtn">Place Order (COD)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/services/cart.js"></script> <!-- Added Cart Service -->
     <script src="js/utils/errorhandler.js"></script>
     <script src="js/services/storage.js"></script>
     <script src="js/services/data.js"></script>
