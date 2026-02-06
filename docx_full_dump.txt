@@ -1,0 +1,356 @@
+1: Product Catalog
+2: 📁 Chips & Wafers
+3: Chilli Chips – 200 g – ₹120
+4: Plain Chips – 200 g – ₹120
+5: Wafers Kelva – ₹100
+6: Plain Soya Katori – ₹80
+7: Masala Soya Katori – ₹80
+8: Plain Aloo Laccha – 400 g – ₹240
+9: Chilli Aloo Laccha – 400 g – ₹240
+10: 📁 Dry Fruit
+11: American Almond – 500 g – ₹600
+12: California Almond – 500 g – ₹700
+13: Sanora Almond – 500 g – ₹1100
+14: Gulband Almond – 500 g – ₹900
+15: Moti Almond – 500 g – ₹800
+16: Ramu Mamra – 250 g – ₹1200
+17: Afghani Mamra – 250 g – ₹1300
+18: W240 Kaju – 500 g – ₹800
+19: W180 Kaju – 500 g – ₹1050
+20: W320 Kaju – 500 g – ₹700
+21: Salted Roasted Kaju – 500 g – ₹950
+22: Roasted Black Pepper Kaju – 500 g – ₹950
+23: Roasted Peri Peri Kaju – 500 g – ₹950
+24: Roasted Salted Almond – 500 g – ₹950
+25: Roasted Peri Peri Almond – 500 g – ₹950
+26: Chocolate Almond – 500 g – ₹950
+27: Chocolate Kaju – 500 g – ₹1050
+28: American Pista – 500 g – ₹800
+29: Irani Pista – 500 g – ₹900
+30: Plain Pista – 250 g – ₹950
+31: Kashmiri Walnut – 500 g – ₹800
+32: Chilli Walnut – 500 g – ₹1200
+33: Kagzi Walnut – 500 g – ₹800
+34: Small Kissmiss – 500 g – ₹400
+35: Big Kissmiss – 500 g – ₹499
+36: Green Kissmiss – 500 g – ₹600
+37: Black Kissmiss – 500 g – ₹600
+38: Munakka – 500 g – ₹750
+39: 📁 Golgappe
+40: Atta Golgappe – ₹80
+41: Sooji Golgappe – ₹170
+42: Fry Golgappe – 250 g – ₹100
+43: Pani Masala – ₹50
+44: Chatpata Paani – ₹38
+45: Meetha Paani – ₹38
+46: Meethi Chatni Masala – ₹38
+47: 📁 Khakhra
+48: Methi Khakhra Coin – ₹220
+49: Masala Khakhra Coin – ₹220
+50: Peri Peri Khakhra Coin – ₹220
+51: Cheese Garlic Khakhra Coin – ₹220
+52: Pani Puri Khakhra Coin – ₹220
+53: Achari Khakhra Coin – ₹220
+54: Maggi Khakhra Coin – ₹220
+55: Pizza Khakhra Coin – ₹220
+56: Methi Khakhra – ₹180
+57: Masala Khakhra – ₹180
+58: Peri Peri Khakhra – ₹180
+59: Pani Puri Khakhra – ₹180
+60: Thepla – ₹80
+61: 📁 Healthy Snacks
+62: • Beans Salted — 300 g — ₹450• Beans Masala — 300 g — ₹450• Mexican Nuts Mixture — 300 g — ₹450• Vegetable Mix — 200 g — ₹380• Lady Finger (Okra) — ₹240• Beetroot Mixture — ₹240
+63: 📁 Imported Dry Fruit
+64: Pie Nuts – 250 g – ₹2250
+65: With Shell Pie Nuts – 250 g – ₹2125
+66: Pickle Nuts – 250 g – ₹850
+67: Hazelnuts – 250 g – ₹950
+68: Macadamia Nuts – 250 g – ₹1200
+69: Brazil Nuts – 250 g – ₹1050
+70: Blueberry Dry – 200 g – ₹600
+71: Crime Berry Dry – 200 g – ₹400
+72: Apricot – 250 g – ₹350
+73: Dry Apricot – 200 g – ₹400
+74: Honey Muesli – 500 g – ₹800
+75: Trail Mix – 500 g – ₹700
+76: 📁 Important Dry Fruits
+77: Dry Fruit Mix – 500 g – ₹950
+78: Anjeer – 500 g – ₹1550
+79: Anjeer – 500 g – ₹1250
+80: Anjeer – 500 g – ₹1050
+81: Afghani Turkish Anjeer – 500 g – ₹1450
+82: Khajur Burfi – ₹480
+83: Anjeer Burfi – ₹580
+84: 📁 Imported Dates
+85: Ajwa Dates – 500 g – ₹900
+86: Medjoul Dates – 500 g – ₹1450
+87: Kalmi Dates – 500 g – ₹580
+88: Fard Dates – 500 g – ₹300
+89: Kimia Dates – 500 g – ₹380
+90: Seedless Dates – 500 g – ₹320
+91: Dry Dates – 500 g – ₹400
+92: Medjoul Dates (Premium) – 500 g – ₹1200
+93: 📁 Spices (Masale)
+94: Jeera – 250 g – ₹200
+95: Ajwain – 200 g – ₹160
+96: Badi Elaichi – 100 g – ₹400
+97: Green Elaichi – 100 g – ₹586
+98: Black Pepper – 100 g – ₹1160
+99: Long – 100 g – ₹240
+100: Dal Chini – 100 g – ₹240
+101: Khas Khas (Poppy Seed) – 100 g – ₹320
+102: Tej Patta – 100 g – ₹160
+103: White Pepper – 100 g – ₹220
+104: Kashmiri Garlic – 100 g – ₹240
+105: Shahi Jeera – 100 g – ₹120
+106: Hing – 50 g – ₹300
+107: Sabut Hing – 50 g – ₹350
+108: Kamarkas Gond – 100 g – ₹140
+109: Multani – 100 g – ₹80
+110: Gond Kathera – 100 g – ₹140
+111: Gond Laddu Wali – 100 g – ₹140
+112: Coconut Burra – 100 g – ₹180
+113: Safed Musli – 100 g – ₹390
+114: Dhaga Mishri – 250 g – ₹160
+115: Methi Dana – 100 g – ₹60
+116: 📁 Mouth Freshener
+117: Anardana Goli — 250 g — ₹180
+118: Hing Peda — 250 g — ₹180
+119: Falsa Goli — 250 g — ₹180
+120: Ram Laddu — 250 g — ₹180
+121: Imli Laddu — 250 g — ₹180
+122: Khatta Meetha Cutting — 200 g — ₹180
+123: Meetha Cutting — 200 g — ₹180
+124: Green Dry Paan — 200 g — ₹200
+125: Dry Paan Calcutta — 200 g — ₹200
+126: Paan Shot — 200 g — ₹180
+127: Khajur Supari — 250 g — ₹200
+128: Jeera Goli — 250 g — ₹180
+129: Lal Jeera Goli — 250 g — ₹180
+130: Coconut Mixer — 200 g — ₹160
+131: Banti Mixer — 200 g — ₹160
+132: Dhaniya Dal Mixer — 200 g — ₹160
+133: Dhaniya Dal — 200 g — ₹200
+134: Meethi Saunf — 200 g — ₹190
+135: Churi Saunf — 200 g — ₹160
+136: Madrasi White Saunf — 200 g — ₹160
+137: Green Madrasi Saunf — 200 g — ₹160
+138: Masala Amla Candy — 250 g — ₹190
+139: Honey Amla Candy — 250 g — ₹190
+140: Meetha Aam Papad Candy — 200 g — ₹150
+141: Khatta Aam Papad Candy — 200 g — ₹150
+142: Imli Toffee — 200 g — ₹150
+143: Ajwain — 250 g — ₹200
+144: Methi Dana — 250 g — ₹200
+145: Hared — 250 g — ₹180
+146: Hing Strong – 250 g – ₹180
+147: Ram Paan – ₹180
+148: Orange Candy – ₹100
+149: Black Pepper Candy – ₹100
+150: Fatafat Goli – ₹180
+151: Swad Toffee – ₹100
+152: Kaccha Aam – 250 g – ₹180
+153: Aam Chawki – 200 g – ₹180
+154: Kala Khatta – 250 g – ₹180
+155: Chikni Supari – ₹400
+156: Cutting Supari – ₹200
+157: Silver Supari – ₹700
+158: Silver Elaichi – ₹750
+159: 📁 Navratra Special
+160: Sabudana Mixture – ₹180
+161: Shing Mixture – ₹180
+162: Salted Peanut – ₹190
+163: Masala Peanut – ₹190
+164: Red Peanut – ₹190
+165: Aloo Laccha Plain – ₹140
+166: Aloo Laccha Masala – ₹140
+167: Wafers – ₹100
+168: Chilli Chips – ₹120
+169: Plain Chips – ₹120
+170: Sabudana Papad – ₹150
+171: Sendha Namak – ₹20
+172: Panch Meva – ₹150
+173: Makhana – ₹220
+174: Kuttu Atta – ₹90
+175: Singhara Atta – ₹110
+176: Samak Atta – ₹90
+177: Samak Rice – ₹90
+178: Sabudana – ₹180
+179: 📁 Papad & Badiya
+180: Sindhi Papad – 400 g – ₹220
+181: Moong Jeera Papad – 400 g – ₹220
+182: Chana Methi Papad – 400 g – ₹220
+183: Chana Masala Papad – 400 g – ₹220
+184: Chana Garlic Papad – 400 g – ₹220
+185: Moong Special Papad – 400 g – ₹220
+186: Amritsari Papad – 400 g – ₹280
+187: Aloo Papad – 500 g – ₹300
+188: South Indian Appalam Papad – ₹40
+189: Sabudana Papad – ₹150
+190: Rice Papad – ₹100
+191: Phool Badi – ₹150
+192: Aloo Chips Papad – ₹150
+193: Amritsari Badi – ₹150
+194: Moong Masala Badi – ₹170
+195: Moong Plain Badi – ₹150
+196: 📁 Makhana
+197: Plain Makhana – 250 g – ₹490
+198: Peri Peri Makhana – 100 g – ₹220
+199: Salted Makhana – 100 g – ₹220
+200: Black Pepper Makhana – 100 g – ₹220
+201: Chaat Masala Makhana – 100 g – ₹220
+202: Pudina Makhana – 100 g – ₹220
+203: Achari Makhana – 100 g – ₹220
+204: Black Salt – 60 g – ₹150
+205: Sea Vinegar Salt – 60 g – ₹150
+206: Himalayan Salt – 60 g – ₹150
+207: Pudina – 60 g – ₹150
+208: Peri Peri – 60 g – ₹150
+209: Tomato – 60 g – ₹150
+210: Cream Onion – 60 g – ₹150
+211: 📁 Regular Namkeen
+212: South Indian Mixture – ₹190
+213: Bombay Mix – ₹190
+214: Navratan Mix – ₹190
+215: Gathiya Mix – ₹190
+216: Pidam Mix – ₹200
+217: Navrang Mix – ₹190
+218: Nasar Mix – ₹190
+219: K.C. Mixture – ₹250
+220: Khatta Meetha Mix – ₹190
+221: Maize Cornflake Mix – ₹190
+222: Plain Bhujia – ₹190
+223: Bikaneri Bhujia – ₹190
+224: Aloo Bhujia – ₹190
+225: Garlic Sev – ₹190
+226: Teekha Sev – ₹190
+227: Ratlami Sev – ₹250
+228: O Number Sev – ₹190
+229: Kadi Patta Bundi – ₹190
+230: Plain Bundi – ₹190
+231: Moongra – ₹190
+232: White Chidwa – ₹190
+233: Cornflake Chidwa – ₹190
+234: Soya Bhel – 400 g – ₹240
+235: Jowar Bajra – 400 g – ₹240
+236: Moong Dal – 400 g – ₹190
+237: Chana Dal – 400 g – ₹190
+238: Roasted Moong – 100 g – ₹240
+239: Bhavnagri Sev – 400 g – ₹160
+240: 📁 Roasted Chips
+241: Corn Triangle – 350 g – ₹180
+242: Makhana Peri Peri Chips – 250 g – ₹190
+243: Makhana Cream Onion Chips – 250 g – ₹190
+244: Beetroot Peri Peri Chips – 250 g – ₹190
+245: Beetroot Cream Onion Chips – 250 g – ₹190
+246: Ragi Cream Onion Chips – 250 g – ₹190
+247: Ragi Manchurian Chips – 250 g – ₹190
+248: Ragi Pudina Chips – 250 g – ₹190
+249: Soya Sticks – 250 g – ₹180
+250: Soya Chips – 250 g – ₹190
+251: Salted Banana Chips – 400 g – ₹280
+252: Black Pepper Banana Chips – 400 g – ₹280
+253: Chana Jor Garam – 400 g – ₹190
+254: Corn Mixture – 400 g – ₹190
+255: Jowar Bajra Mix – 400 g – ₹190
+256: Zucchini Chips – 250 g – ₹190
+257: Peri Peri Bhindi – 400 g – ₹190
+258: Salted Bhindi – 400 g – ₹190
+259: Bhel Puri Mix – 400 g – ₹190
+260: Gathiya Besan – 325 g – ₹120
+261: Besan Papdi – 250 g – ₹120
+262: Plain Garlic Chakli – 400 g – ₹190
+263: Masala Garlic Chakli – 400 g – ₹190
+264: South Indian Chakli Masala – 400 g – ₹190
+265: Tapioca Chips – 250 g – ₹190
+266: Corn Nachos Chips – ₹180
+267: Mix Vegetable Chips – 250 g – ₹190
+268: South Indian Chakli Plain – 400 g – ₹190
+269: 📁 Seeds
+270: Mix Seeds – 200 g – ₹300
+271: Pumpkin Seeds – 200 g – ₹300
+272: Sunflower Seeds – 200 g – ₹300
+273: Watermelon Seeds – 200 g – ₹300
+274: Muskmelon Seeds – 200 g – ₹300
+275: Flax Seeds – 200 g – ₹150
+276: Sabja Seeds – 200 g – ₹300
+277: Chia Seeds – 200 g – ₹300
+278: Roasted Mix Seeds – 200 g – ₹360
+279: Roasted Mix Seeds – 500 g – ₹900
+280: Sesame Seeds – 200 g – ₹150
+281: 📁 Special Achar (Pickle)
+282: Punjabi Mango Pickle – 500 g – ₹250
+283: Hing Mango Pickle – 500 g – ₹250
+284: Cutting Mango Pickle – 500 g – ₹250
+285: Mango Chaatni Pickle – 500 g – ₹250
+286: Lemon Chaatni Pickle – 500 g – ₹250
+287: Green Chilli Pickle – 500 g – ₹250
+288: Spicy Green Chilli Pickle – 500 g – ₹250
+289: Red Chilli Pickle – 500 g – ₹250
+290: Garlic Pickle – 500 g – ₹300
+291: Gajar Gobhi Shalgam Pickle – 500 g – ₹250
+292: Tenti Dela Pickle – 500 g – ₹250
+293: Lasode Ka Pickle – 500 g – ₹250
+294: Khatta Lemon Pickle – 500 g – ₹250
+295: Dry Mango Pickle – 500 g – ₹250
+296: 📁 Special Cookies
+297: Atta Cookies – 400 g – ₹190
+298: Gur Atta Cookies – 400 g – ₹190
+299: Desi Ghee Atta Cookies – 400 g – ₹350
+300: Jeera Cookies – 400 g – ₹190
+301: Ajwain Cookies – 400 g – ₹190
+302: Honey Oats Cookies – 400 g – ₹300
+303: Sattu Chana Cookies – 400 g – ₹350
+304: Multigrain Cookies – 400 g – ₹350
+305: Dry Fruit Cookies – 400 g – ₹350
+306: Kaju Pista Cookies – 400 g – ₹320
+307: Fruit Cake Rusk – 400 g – ₹300
+308: Plain Cake Rusk – 400 g – ₹300
+309: Thin Almond Cookies – ₹350
+310: American Cashew Nut Cookies – ₹280
+311: Sugar Free Thin Almond Cookies – ₹380
+312: Ajwain Fan – ₹180
+313: Ajwain Masori – ₹180
+314: Plain Khari Puff – ₹190
+315: Saunf Rusk – ₹190
+316: Milk Dehraduni Rusk – ₹190
+317: Sugar Free Rusk – ₹190
+318: Sugar Free Oats Rusk – ₹150
+319: Garlic Toast – ₹240
+320: Normal Rusk – ₹80
+321: Normal Saunf Rusk – ₹150
+322: 📁 Special Matthi
+323: Plain Matthi – 500 g – ₹170
+324: Methi Matthi – 500 g – ₹170
+325: Khajur Matthi – 500 g – ₹170
+326: Gud Pare – 500 g – ₹170
+327: Namak Pare – 400 g – ₹160
+328: Chaat Papdi – 400 g – ₹160
+329: Shakkar Pare – 500 g – ₹170
+330: Achari Matthi – 500 g – ₹190
+331: Dal Kachori – 500 g – ₹200
+332: Atta Flax Seed Matthi – 500 g – ₹320
+333: Gud Tangri – 500 g – ₹190
+334: Hing Kachori – ₹280
+335: 📁 Chana & Peanut
+336: Bhuna Chana — 500 g — ₹190
+337: Plain Chana — 500 g — ₹190
+338: Bombay Chana — 500 g — ₹190
+339: Hing Chana — 500 g — ₹190
+340: Kabuli Chana — 500 g — ₹240
+341: Chana Jor — 500 g — ₹240
+342: Unsalted Peanut — 500 g — ₹190
+343: Salted Peanut — 500 g — ₹190
+344: Hing Peanut — 500 g — ₹190
+345: Red Peanut Fried — 500 g — ₹190
+346: Sing Dana — ₹200
+347: Cocktail Mix — 400 g — ₹180
+348: Raw Peanut — 500 g — ₹160
+349: 📁 Gachak & Laddoo
+350: • Khajur Gur Chikki — 500 g — ₹250• Gulab Patti Chikki — 400 g — ₹240• Khaste Gazak — 400 g — ₹240• Khaste Roll Gazak — 400 g — ₹240• Shalimar Gazak Ghee — 400 g — ₹300• Til Patti — 400 g — ₹240• Til Burfi — 400 g — ₹300• Til Laddo — 300 g — ₹280• Til Flax Seed Laddo — 300 g — ₹280• Kala Til Laddo — 300 g — ₹280• Til Gond Laddo — 400 g — ₹300• Gur Revdi — 400 g — ₹240• Sikka Revdi — 400 g — ₹240• Sev Patti — 400 g — ₹240• Gur Chana — 400 g — ₹240• Murmura Patti — ₹80• Murmura Laddo — ₹80• Til Bugga — 400 g — ₹300
+351: 📁 Moongfali Roasted
+352: • Moongfali — 400 g — ₹120• Popcorn — ₹80
+353: 📁 Fryums
+354: • Multi Color Fryum — 250 g — ₹100• Smily — 250 g — ₹100• Badminton — 250 g — ₹100• B Ghost — 250 g — ₹100• Teddy Berry — 250 g — ₹100• Pasta Fryum — 250 g — ₹100• Sabudana Fryum — 250 g — ₹100• Aloo Fryum — 250 g — ₹100
+355: 📁 Jaggery
+356: • Saunf Gud — 500 g — ₹180• Ajwain Gud — 500 g — ₹180• Ginger Gud — 500 g — ₹180• Mix Seed Gud — 400 g — ₹220• Dry Fruit Gud — 400 g — ₹250• Plain Gud — 400 g — ₹180• Organic Gud Powder — 900 g — ₹290• Plain Gud — 500 g — ₹100

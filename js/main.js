@@ -136,20 +136,24 @@ window.SindhiApp = window.SindhiApp || {};
                 </div>
                 <div class="product-content">
                     <h3 class="product-title">${product.name}</h3>
-                    <p class="product-description">
-                        Premium quality ${product.name.toLowerCase()}. Fresh and authentic.
-                        <br>
-                        <strong>₹${product.price}</strong> <small>(${product.reviews} reviews)</small>
-                    </p>
-                    <div class="product-features">
+                    <div class="product-description" style="margin-bottom: 1.5rem; font-size: 1rem; color: var(--neutral-600);">
+                        <span style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 0.5rem;">
+                            Premium quality ${product.name.toLowerCase()}. Fresh and authentic.
+                        </span>
+                        <div style="margin-top: 0.5rem; color: var(--neutral-900);">
+                            <strong style="font-size: 1.125rem;">₹${product.price}</strong> 
+                            <small style="color: var(--neutral-500); font-size: 0.875rem;">(${product.reviews} reviews)</small>
+                        </div>
+                    </div>
+                    <div class="product-actions" style="margin-top: 0;">
                         <button class="btn btn-primary js-add-cart" 
                             data-id="${product.id}" 
                             data-name="${product.name}"
                             data-price="${product.price}"
                             data-image="${product.image}"
-                            style="padding: 0.5rem 1rem; width: 100%;"
+                            style="width: 100%; padding: 0.5rem 1rem; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.875rem;"
                             ${product.inStock === false ? 'disabled' : ''}>
-                            ${product.inStock !== false ? 'Add to Cart' : 'Sold Out'}
+                            ${product.inStock !== false ? 'ADD TO CART' : 'SOLD OUT'}
                         </button>
                     </div>
                 </div>
@@ -448,35 +452,15 @@ window.SindhiApp = window.SindhiApp || {};
 
     function initPillNavigation() {
         const pillNav = document.getElementById('pillNav');
-        const pillIndicator = document.getElementById('pillIndicator');
         const navItems = document.querySelectorAll('.pill-nav-item');
 
         // Init Contact Modal here as part of Navigation
         initContactModal();
 
-        if (!pillNav || !pillIndicator) return;
+        if (!pillNav) return;
 
         let isManualScroll = false;
         let manualScrollTimeout;
-
-        function updateIndicator(item) {
-            const itemRect = item.getBoundingClientRect();
-            const navRect = pillNav.getBoundingClientRect();
-
-            // Handle potentially zero-width rects if hidden
-            if (itemRect.width === 0) return;
-
-            pillIndicator.style.width = `${itemRect.width}px`;
-            pillIndicator.style.left = `${itemRect.left - navRect.left}px`;
-        }
-
-        // Initialize position
-        const activeItem = pillNav.querySelector('.active');
-        if (activeItem) {
-            // Wait for fonts/layout to settle
-            setTimeout(() => updateIndicator(activeItem), 100);
-            setTimeout(() => updateIndicator(activeItem), 500); // Double check
-        }
 
         // Click Handler
         navItems.forEach(item => {
@@ -490,7 +474,6 @@ window.SindhiApp = window.SindhiApp || {};
 
                 navItems.forEach(n => n.classList.remove('active'));
                 this.classList.add('active');
-                updateIndicator(this);
             });
         });
 
@@ -527,16 +510,9 @@ window.SindhiApp = window.SindhiApp || {};
                     n.classList.remove('active');
                     if (n.dataset.section === currentSectionId) {
                         n.classList.add('active');
-                        updateIndicator(n);
                     }
                 });
             });
-        });
-
-        // Handle Resize
-        window.addEventListener('resize', () => {
-            const current = pillNav.querySelector('.active');
-            if (current) updateIndicator(current);
         });
     }
 
