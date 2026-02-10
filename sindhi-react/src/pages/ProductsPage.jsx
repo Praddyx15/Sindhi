@@ -12,7 +12,7 @@ const ProductsPage = () => {
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [priceRange, setPriceRange] = useState({ min: 0, max: 2000 });
+    const [maxPrice, setMaxPrice] = useState(5000);
     const [selectedWeights, setSelectedWeights] = useState([]);
 
     // Derived Data
@@ -50,7 +50,7 @@ const ProductsPage = () => {
         }
 
         // Price Filter
-        result = result.filter(p => p.price >= priceRange.min && p.price <= priceRange.max);
+        result = result.filter(p => p.price <= maxPrice);
 
         // Weight Filter
         if (selectedWeights.length > 0) {
@@ -62,7 +62,7 @@ const ProductsPage = () => {
         }
 
         setFilteredProducts(result);
-    }, [products, selectedCategory, searchQuery, priceRange, selectedWeights]);
+    }, [products, selectedCategory, searchQuery, maxPrice, selectedWeights]);
 
     const handleCategoryClick = (cat) => {
         setSelectedCategory(cat);
@@ -171,35 +171,25 @@ const ProductsPage = () => {
                             {/* Price Filter */}
                             <CollapsibleSection title="Price Range">
                                 <div className="px-1 py-4">
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <div className="flex-1">
-                                            <label className="text-xs text-neutral-500 mb-1 block">Min</label>
-                                            <input
-                                                type="number"
-                                                value={priceRange.min}
-                                                onChange={(e) => setPriceRange({ ...priceRange, min: Number(e.target.value) })}
-                                                className="w-full px-2 py-1 bg-neutral-50 border border-neutral-200 rounded text-sm"
-                                            />
-                                        </div>
-                                        <div className="flex-1">
-                                            <label className="text-xs text-neutral-500 mb-1 block">Max</label>
-                                            <input
-                                                type="number"
-                                                value={priceRange.max}
-                                                onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
-                                                className="w-full px-2 py-1 bg-neutral-50 border border-neutral-200 rounded text-sm"
-                                            />
-                                        </div>
+                                    <div className="flex items-center justify-between mb-3">
+                                        <span className="text-sm text-neutral-600">Up to:</span>
+                                        <span className="text-lg font-bold text-primary">₹{maxPrice}</span>
                                     </div>
+
                                     <input
                                         type="range"
                                         min="0"
                                         max="5000"
                                         step="50"
-                                        value={priceRange.max}
-                                        onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
-                                        className="w-full accent-primary h-1 bg-neutral-200 rounded-lg appearance-none cursor-pointer"
+                                        value={maxPrice}
+                                        onChange={(e) => setMaxPrice(Number(e.target.value))}
+                                        className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-primary [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-primary [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:shadow-md"
                                     />
+
+                                    <div className="flex justify-between text-xs text-neutral-400 mt-2">
+                                        <span>₹0</span>
+                                        <span>₹5000</span>
+                                    </div>
                                 </div>
                             </CollapsibleSection>
 

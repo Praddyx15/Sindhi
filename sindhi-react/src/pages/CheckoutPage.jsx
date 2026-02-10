@@ -4,20 +4,26 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ChevronLeft, MapPin, Clock, CreditCard, CheckCircle } from 'lucide-react';
 
 const CheckoutPage = () => {
-    const { cart, cartTotal, clearCart } = useProductContext();
+    const { cart, cartTotal, checkout } = useProductContext();
     const navigate = useNavigate();
 
     // Form State
     const [formData, setFormData] = useState({
         name: '',
+        email: '',
         phone: '',
         address: '',
-        city: 'Gurugram', // Defaulting as per local delivery context usually
+        address2: '',
+        city: 'Gurugram',
+        state: 'Haryana',
         zip: ''
     });
 
-    const [deliveryType, setDeliveryType] = useState('standard_3'); // standard_3, standard_6, standard_9, urgent
+    const [deliveryType, setDeliveryType] = useState('standard_3');
     const [orderPlaced, setOrderPlaced] = useState(false);
+    const [orderNumber, setOrderNumber] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState(null);
 
     // Delivery Costs & Options
     const DELIVERY_CHARGES = {
@@ -41,15 +47,57 @@ const CheckoutPage = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handlePlaceOrder = (e) => {
+    const handlePlaceOrder = async (e) => {
         e.preventDefault();
-        // Here you would typically send data to backend
-        // For now, simulate success
-        setOrderPlaced(true);
-        setTimeout(() => {
-            clearCart();
-            // navigate('/'); // Optional: redirect home after some time
-        }, 3000);
+        setIsSubmitting(true);
+        setError(null);
+
+        try {
+            // Map delivery type to slot description
+            const deliverySlots = {
+                'standard_3': '3 Hours Delivery',
+                'standard_6': '6 Hours Delivery',
+                'standard_9': '9 Hours Delivery',
+                'urgent': 'Urgent Delivery (ASAP)'
+            };
+
+            // Prepare order data for API
+            const orderData = {
+                customer_name: formData.name,
+                customer_email: formData.email,
+                customer_phone: formData.phone,
+                shipping_address_line1: formData.address,
+                shipping_address_line2: formData.address2,
+                shipping_city: formData.city,
+                shipping_state: formData.state,
+                shipping_pincode: formData.zip,
+                delivery_slot: deliverySlots[deliveryType],
+                customer_notes: ''
+            };
+
+            // Call checkout from context (which calls the API)
+            const result = await checkout(orderData);
+
+            if (result.success) {
+                setOrderNumber(result.order.order_number);
+                setOrderPlaced(true);
+            } else {
+                // Handle validation errors
+                if (typeof result.error === 'object') {
+                    const errorMessages = Object.entries(result.error)
+                        .map(([field, messages]) => `${field}: ${Array.isArray(messages) ? messages.join(', ') : messages}`)
+                        .join('\n');
+                    setError(errorMessages);
+                } else {
+                    setError(result.error);
+                }
+            }
+        } catch (err) {
+            setError('An unexpected error occurred. Please try again.');
+            console.error('Checkout error:', err);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     if (cart.length === 0 && !orderPlaced) {
@@ -69,7 +117,8 @@ const CheckoutPage = () => {
                         <CheckCircle size={32} />
                     </div>
                     <h2 className="text-2xl font-bold text-neutral-800 mb-2">Order Placed Successfully!</h2>
-                    <p className="text-neutral-600 mb-6">Thank you for your order, {formData.name}. We will contact you shortly to confirm standard details.</p>
+                    <p className="text-neutral-600 mb-4">Thank you for your order, {formData.name}!</p>
+                    <p className="text-sm text-neutral-500 mb-6">Order Number: <strong>{orderNumber}</strong></p>
                     <Link to="/" className="block w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-600 transition-colors">
                         Continue Shopping
                     </Link>
@@ -99,6 +148,11 @@ const CheckoutPage = () => {
                                 <MapPin size={22} className="text-primary" />
                                 Shipping Details
                             </h2>
+                            {error && (
+                                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                                    <p className="text-sm text-red-600 whitespace-pre-line">{error}</p>
+                                </div>
+                            )}
                             <form id="checkout-form" onSubmit={handlePlaceOrder} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-medium text-neutral-700 mb-1">Full Name</label>
@@ -107,6 +161,16 @@ const CheckoutPage = () => {
                                         type="text"
                                         name="name"
                                         value={formData.name}
+                                        onChange={handleInputChange}
+                                        className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-neutral-700 mb-1">Email</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
                                         onChange={handleInputChange}
                                         className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
                                     />
@@ -122,6 +186,27 @@ const CheckoutPage = () => {
                                         className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
                                     />
                                 </div>
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-medium text-neutral-700 mb-1">Address Line 1</label>
+                                    <input
+                                        required
+                                        type="text"
+                                        name="address"
+                                        value={formData.address}
+                                        onChange={handleInputChange}
+                                        className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+                                    />
+                                </div>
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-medium text-neutral-700 mb-1">Address Line 2 (Optional)</label>
+                                    <input
+                                        type="text"
+                                        name="address2"
+                                        value={formData.address2}
+                                        onChange={handleInputChange}
+                                        className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+                                    />
+                                </div>
                                 <div>
                                     <label className="block text-sm font-medium text-neutral-700 mb-1">City</label>
                                     <input
@@ -133,16 +218,27 @@ const CheckoutPage = () => {
                                         className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
                                     />
                                 </div>
-                                <div className="md:col-span-2">
-                                    <label className="block text-sm font-medium text-neutral-700 mb-1">Address</label>
-                                    <textarea
+                                <div>
+                                    <label className="block text-sm font-medium text-neutral-700 mb-1">State</label>
+                                    <input
                                         required
-                                        name="address"
-                                        rows="3"
-                                        value={formData.address}
+                                        type="text"
+                                        name="state"
+                                        value={formData.state}
                                         onChange={handleInputChange}
                                         className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
-                                    ></textarea>
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-neutral-700 mb-1">PIN Code</label>
+                                    <input
+                                        required
+                                        type="text"
+                                        name="zip"
+                                        value={formData.zip}
+                                        onChange={handleInputChange}
+                                        className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
+                                    />
                                 </div>
                             </form>
                         </div>
@@ -158,8 +254,8 @@ const CheckoutPage = () => {
                                     <label
                                         key={option.id}
                                         className={`relative flex flex-col p-4 border rounded-xl cursor-pointer transition-all ${deliveryType === option.id
-                                                ? 'border-primary bg-primary/5 ring-1 ring-primary'
-                                                : 'border-neutral-200 hover:border-primary/50'
+                                            ? 'border-primary bg-primary/5 ring-1 ring-primary'
+                                            : 'border-neutral-200 hover:border-primary/50'
                                             }`}
                                     >
                                         <input
@@ -233,9 +329,10 @@ const CheckoutPage = () => {
                             <button
                                 type="submit"
                                 form="checkout-form"
-                                className="w-full mt-6 bg-primary text-white py-3.5 rounded-xl font-bold hover:bg-primary-600 transition-colors shadow-lg shadow-primary/25"
+                                disabled={isSubmitting}
+                                className="w-full mt-6 bg-primary text-white py-3.5 rounded-xl font-bold hover:bg-primary-600 transition-colors shadow-lg shadow-primary/25 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                Place Order (COD)
+                                {isSubmitting ? 'Placing Order...' : 'Place Order (COD)'}
                             </button>
                             <p className="text-xs text-center text-neutral-400 mt-4">
                                 By placing this order, you agree to our Terms of Service.

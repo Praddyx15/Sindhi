@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { PRODUCTS as REAL_PRODUCTS, CATEGORIES } from '../data/products';
+import { getProducts, getCategories, createOrder, handleApiError, adminLogin as apiAdminLogin, adminLogout as apiAdminLogout, verifyAdminSession } from '../services/api';
 
 const ProductContext = createContext();
 
@@ -9,24 +9,100 @@ export const useProductContext = () => {
 
 export const ProductProvider = ({ children }) => {
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]); // String array for filtering
+    const [fullCategories, setFullCategories] = useState([]); // Full category objects for display
     const [cart, setCart] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [isAdmin, setIsAdmin] = useState(false);
+    const [adminUser, setAdminUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // Initialize Products
+    // Fetch Products from API
+    const fetchProducts = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            // Fetch products with pagination disabled (get all)
+            const response = await getProducts({ page_size: 1000 });
+
+            // Transform API response to match frontend format
+            const transformedProducts = response.results.map(product => ({
+                id: product.id,
+                name: product.name,
+                slug: product.slug,
+                category: product.category_name,
+                price: parseFloat(product.price),
+                effectivePrice: parseFloat(product.effective_price),
+                discount: parseFloat(product.effective_discount),
+                image: product.image_url || '/assets/namkeen.png',
+                description: product.short_description || '',
+                in_stock: product.in_stock,
+                stock_quantity: product.stock_quantity,
+                isFeatured: product.is_featured,
+                weight: product.weight || '',
+            }));
+
+            setProducts(transformedProducts);
+        } catch (err) {
+            console.error('Failed to fetch products:', err);
+            setError(handleApiError(err));
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        // In a real app, we might check localStorage or an API here
-        // For now, mapping real products to add IDs if strictly necessary, 
-        // though index-based IDs are used in the legacy data.js
-        const initializedProducts = REAL_PRODUCTS.map((p, index) => ({
-            id: index + 1,
-            ...p,
-            inStock: true,
-            rating: (4.5 + Math.random() * 0.5).toFixed(1),
-            reviews: Math.floor(Math.random() * 200) + 50
-        }));
-        setProducts(initializedProducts);
+        fetchProducts();
+    }, []);
+
+    // Fetch Categories from API
+    const fetchCategories = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response = await getCategories({ page_size: 1000 });
+            // Handle paginated response
+            const categoryData = response.results || response;
+
+            // Store full category objects for display (HomePage)
+            setFullCategories(categoryData);
+
+            // Store category names for filtering (ProductsPage)
+            const categoryNames = categoryData.map(cat => cat.name);
+            setCategories(['All', ...categoryNames]);
+        } catch (err) {
+            console.error('Failed to fetch categories:', err);
+            setError(handleApiError(err));
+            // Fallback to 'All' if categories fail to load
+            setCategories(['All']);
+            setFullCategories([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
+    // Verify admin session on mount
+    useEffect(() => {
+        const checkAdminSession = async () => {
+            try {
+                const response = await verifyAdminSession();
+                if (response.authenticated) {
+                    setIsAdmin(true);
+                    setAdminUser(response.user);
+                }
+            } catch (error) {
+                console.error('Failed to verify admin session:', error);
+            }
+        };
+
+        checkAdminSession();
     }, []);
 
     // Load Cart from LocalStorage
@@ -73,31 +149,63 @@ export const ProductProvider = ({ children }) => {
 
     const clearCart = () => setCart([]);
 
-    // Admin Operations
-    const login = (username, password) => {
-        if (username === 'admin' && password === 'admin123') {
-            setIsAdmin(true);
-            return true;
+    // Checkout with API
+    const checkout = async (customerInfo) => {
+        try {
+            // Transform cart items to API format
+            const items = cart.map(item => ({
+                product: item.id,
+                quantity: item.quantity
+            }));
+
+            // Create order via API
+            const orderData = {
+                ...customerInfo,
+                items
+            };
+
+            const order = await createOrder(orderData);
+
+            // Clear cart on successful order
+            clearCart();
+
+            return { success: true, order };
+        } catch (err) {
+            console.error('Checkout failed:', err);
+            return {
+                success: false,
+                error: typeof err === 'object' ? err : handleApiError(err)
+            };
         }
-        return false;
     };
 
-    const logout = () => setIsAdmin(false);
-
-    const updateProductConfig = (productId, updates) => {
-        setProducts(prev => prev.map(p => p.id === productId ? { ...p, ...updates } : p));
+    // Admin Operations
+    const login = async (username, password) => {
+        try {
+            const response = await apiAdminLogin(username, password);
+            if (response.success) {
+                setIsAdmin(true);
+                setAdminUser(response.user);
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error('Login failed:', error);
+            return false;
+        }
     };
 
-    const addProduct = (newProduct) => {
-        setProducts(prev => {
-            const maxId = prev.length > 0 ? Math.max(...prev.map(p => p.id)) : 0;
-            return [...prev, { ...newProduct, id: maxId + 1, inStock: true, rating: 0, reviews: 0 }];
-        });
-    };
-
-    const deleteProduct = (productId) => {
-        setProducts(prev => prev.filter(p => p.id !== productId));
-        removeFromCart(productId);
+    const logout = async () => {
+        try {
+            await apiAdminLogout();
+            setIsAdmin(false);
+            setAdminUser(null);
+        } catch (error) {
+            console.error('Logout failed:', error);
+            // Clear local state even if API call fails
+            setIsAdmin(false);
+            setAdminUser(null);
+        }
     };
 
     // Derived State
@@ -107,17 +215,24 @@ export const ProductProvider = ({ children }) => {
         return matchesCategory && matchesSearch;
     });
 
-    const cartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const cartTotal = cart.reduce((total, item) => {
+        // Use effective price if available (with discount)
+        const price = item.effectivePrice || item.price;
+        return total + (price * item.quantity);
+    }, 0);
+
     const cartCount = cart.reduce((count, item) => count + item.quantity, 0);
 
     const value = {
         products,
-        categories: CATEGORIES,
+        categories,
+        fullCategories, // Add fullCategories to context value
         cart,
         addToCart,
         removeFromCart,
         updateQuantity,
         clearCart,
+        checkout,
         searchQuery,
         setSearchQuery,
         selectedCategory,
@@ -126,11 +241,13 @@ export const ProductProvider = ({ children }) => {
         cartTotal,
         cartCount,
         isAdmin,
+        adminUser,
         login,
         logout,
-        updateProductConfig,
-        addProduct,
-        deleteProduct
+        loading,
+        error,
+        fetchProducts,
+        fetchCategories
     };
 
     return (

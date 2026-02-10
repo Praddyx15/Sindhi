@@ -6,15 +6,43 @@ import ContactSection from '../components/sections/ContactSection';
 import { ShoppingBag, ChevronDown, ArrowRight } from 'lucide-react';
 
 const HomePage = () => {
-    const { products } = useProductContext();
+    const { products, fullCategories, loading, error } = useProductContext();
     const navigate = useNavigate();
 
-    // Extract Categories
-    const categories = ['All', ...new Set(products.map(p => p.category))].filter(c => c !== 'All').slice(0, 8); // Show top 8 categories
+    // Featured Products (use isFeatured flag from API)
+    const featuredProducts = products.filter(p => p.isFeatured).slice(0, 12);
 
-    // Featured Products (Mock logic: take first 12 for now or random)
-    // ideally we would mark them in data, but taking first 12 of different cats works for visual
-    const featuredProducts = products.slice(0, 12);
+    // If no featured products, show first 12
+    const displayProducts = featuredProducts.length > 0 ? featuredProducts : products.slice(0, 12);
+
+    // Loading state
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-neutral-50">
+                <div className="text-center">
+                    <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-neutral-600">Loading products...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Error state
+    if (error) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-neutral-50 px-4">
+                <div className="text-center max-w-md">
+                    <p className="text-red-600 mb-4">{error}</p>
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-600"
+                    >
+                        Retry
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="pb-20">
@@ -82,51 +110,55 @@ const HomePage = () => {
                     <div className="w-24 h-1 bg-primary mx-auto rounded-full" />
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                    {categories.map((cat, index) => {
-                        // Cyclic gradients for visual variety
-                        const gradients = [
-                            'from-orange-50 to-amber-100',
-                            'from-rose-50 to-pink-100',
-                            'from-emerald-50 to-green-100',
-                            'from-blue-50 to-indigo-100',
-                            'from-purple-50 to-violet-100',
-                            'from-teal-50 to-cyan-100'
-                        ];
-                        const gradient = gradients[index % gradients.length];
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                    {fullCategories.slice(0, 12).map((category) => (
+                        <Link
+                            key={category.slug}
+                            to={`/products?category=${category.name}`}
+                            className="group relative overflow-hidden rounded-2xl aspect-square bg-gradient-to-br from-amber-50 to-orange-50 hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+                        >
+                            {/* Background Image Placeholder */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10">
+                                {category.image_url ? (
+                                    <img
+                                        src={category.image_url}
+                                        alt={category.name}
+                                        className="w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-opacity"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center">
+                                        <div className="text-8xl opacity-10 group-hover:opacity-20 transition-opacity">
+                                            🥘
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
 
-                        return (
-                            <Link
-                                key={cat}
-                                to={`/products?category=${cat}`}
-                                className="group relative h-48 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-white/50"
-                            >
-                                {/* Gradient Background */}
-                                <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-80 group-hover:opacity-100 transition-opacity`} />
+                            {/* Category Name Overlay */}
+                            <div className="absolute inset-0 flex items-start justify-center pt-6 px-4">
+                                <h3 className="text-lg font-bold text-neutral-800 text-center leading-tight group-hover:text-primary transition-colors z-10">
+                                    {category.name}
+                                </h3>
+                            </div>
 
-                                {/* Decorative Circle */}
-                                <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-white/20 rounded-full blur-2xl group-hover:bg-white/30 transition-colors" />
-
-                                <div className="absolute inset-0 flex flex-col items-center justify-center z-20 p-4 text-center">
-                                    <span className="font-display text-lg md:text-xl font-bold text-neutral-800 group-hover:scale-105 transition-transform">
-                                        {cat}
-                                    </span>
-                                    <span className="text-xs text-neutral-500 mt-2 font-medium bg-white/60 px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                                        View Collection
-                                    </span>
-                                </div>
-                            </Link>
-                        );
-                    })}
+                            {/* Hover Effect */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </Link>
+                    ))}
                 </div>
-                <div className="text-center mt-12">
-                    <Link to="/products" className="text-primary font-medium hover:text-primary-700 flex items-center justify-center gap-2">
-                        View all categories <ArrowRight size={16} />
+
+                <div className="text-center mt-8">
+                    <Link
+                        to="/products"
+                        className="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all"
+                    >
+                        View all categories
+                        <span>→</span>
                     </Link>
                 </div>
             </div>
 
-            {/* Featured Products (Most Ordered) */}
+            {/* Featured Products */}
             <div className="py-20 bg-neutral-50">
                 <div className="w-full max-w-[1200px] mx-auto px-6">
                     <div className="flex justify-between items-end mb-12">
@@ -139,25 +171,25 @@ const HomePage = () => {
                             View All <ArrowRight size={16} />
                         </Link>
                     </div>
+                </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {featuredProducts.map(product => (
-                            <ProductCard key={product.name} product={product} />
-                        ))}
-                    </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {displayProducts.map(product => (
+                        <ProductCard key={product.id} product={product} />
+                    ))}
+                </div>
 
-                    <div className="mt-12 text-center md:hidden">
-                        <Link to="/products" className="btn-primary inline-flex items-center gap-2">
-                            View All Products <ArrowRight size={16} />
-                        </Link>
-                    </div>
+                <div className="text-center mt-8 md:hidden">
+                    <Link to="/products" className="text-primary font-semibold hover:underline">
+                        View All Products →
+                    </Link>
                 </div>
             </div>
 
             {/* About & Contact */}
             <AboutSection />
             <ContactSection />
-        </div>
+        </div >
     );
 };
 
