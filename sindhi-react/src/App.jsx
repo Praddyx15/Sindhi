@@ -11,6 +11,7 @@ import ProductManagement from './pages/admin/ProductManagement';
 import CategoryManagement from './pages/admin/CategoryManagement';
 import OrderManagement from './pages/admin/OrderManagement';
 import FestiveOffers from './pages/admin/FestiveOffers';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Layout><HomePage /></Layout>} />
           <Route path="/products" element={<Layout><ProductsPage /></Layout>} />
           <Route path="/checkout" element={<Layout><CheckoutPage /></Layout>} />
+          <Route path="/privacy-policy" element={<Layout><PrivacyPolicyPage /></Layout>} />
 
           {/* Admin Login (No Layout) */}
           <Route path="/admin" element={<AdminLogin />} />

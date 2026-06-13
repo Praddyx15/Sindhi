@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
@@ -13,15 +14,14 @@ const Footer = () => {
                     </div>
 
                     <div className="flex gap-6 text-sm text-gray-400">
-                        <a href="#" className="hover:text-white transition-colors">Home</a>
-                        <a href="#" className="hover:text-white transition-colors">Contact</a>
-                        <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+                        <Link to="/" className="hover:text-white transition-colors">Home</Link>
+                        <Link to="/#contact" className="hover:text-white transition-colors">Contact</Link>
+                        <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
                     </div>
                 </div>
 
                 <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
-                    <p>&copy; 2024 Sindhi Namkeen & Dry Fruits. All rights reserved.</p>
-                    <p className="mt-2 md:mt-0">FSSAI License No: 12345678901234</p>
+                    <p>&copy; 2026 Sindhi Namkeen & Dry Fruits. All rights reserved.</p>
                 </div>
             </div>
         </footer>

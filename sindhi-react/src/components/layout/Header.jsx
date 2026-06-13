@@ -16,23 +16,7 @@ const Header = ({ toggleCart }) => {
         { name: 'Contact', path: '/#contact' }
     ];
 
-    const handleNavClick = (e, path) => {
-        // If it's a hash link
-        if (path.includes('#')) {
-            const [pathname, hash] = path.split('#');
-
-            // If we are already on the home page
-            if (location.pathname === pathname || (pathname === '/' && location.pathname === '/')) {
-                // If we are on home, scroll to section
-                // But if we are on /products, we need to navigate first
-                // Link component handles navigation, we just need to handle scroll if ALREADY on page
-
-                // Actually, if we are on /products, Link will take us to /#about
-                // But the hash scrolling might need a delay or check
-            }
-        }
-        // For standard links like /products, default behavior is fine
-        // Just scroll to top
+    const handleNavClick = (path) => {
         if (!path.includes('#')) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -71,7 +55,7 @@ const Header = ({ toggleCart }) => {
                                 <Link
                                     key={link.name}
                                     to={link.path}
-                                    onClick={(e) => handleNavClick(e, link.path)}
+                                    onClick={() => handleNavClick(link.path)}
                                     className={`relative px-5 py-2 rounded-full text-base font-medium transition-all duration-300 ${isActive
                                             ? 'bg-primary text-white shadow-md shadow-primary/30'
                                             : 'text-neutral-600 hover:text-primary'
@@ -141,8 +125,8 @@ const Header = ({ toggleCart }) => {
                             <Link
                                 key={link.name}
                                 to={link.path}
-                                onClick={(e) => {
-                                    handleNavClick(e, link.path);
+                                onClick={() => {
+                                    handleNavClick(link.path);
                                     setIsMobileMenuOpen(false);
                                 }}
                                 className="block px-4 py-3 text-neutral-800 font-medium hover:bg-neutral-50 hover:text-primary rounded-xl transition-colors"

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import { useProductContext } from '../../context/ProductContext';
@@ -9,6 +9,17 @@ const Layout = ({ children }) => {
     const { cart, removeFromCart, updateQuantity, cartTotal } = useProductContext();
     const [isCartOpen, setIsCartOpen] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.hash) {
+            const timer = setTimeout(() => {
+                const el = document.querySelector(location.hash);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [location]);
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
