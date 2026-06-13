@@ -60,29 +60,52 @@ export const ProductProvider = ({ children }) => {
             const response = await getProducts({ page_size: 1000 });
 
             // Transform API response to match frontend format
-            const transformedProducts = response.results.map(product => ({
-                id: product.id,
-                name: product.name,
-                slug: product.slug,
-                category: product.category_name,
-                price: parseFloat(product.price),
-                effectivePrice: parseFloat(product.effective_price),
-                discount: parseFloat(product.effective_discount),
-                image: product.image_url || categoryImageMap[product.category_name] || '/assets/namkeen.png',
-                description: product.short_description || '',
-                in_stock: product.in_stock,
-                stock_quantity: product.stock_quantity,
-                isFeatured: product.is_featured,
-                weight: product.weight || '',
-            }));
+            const transformedProducts = response.results.map(product => {
+                const sizes = (product.sizes || []).map(s => ({
+                    id: s.id,
+                    size_name: s.size_name,
+                    price: parseFloat(s.price),
+                    effective_price: parseFloat(s.effective_price),
+                }));
+                // price/effectivePrice use min size values when sizes exist
+                const basePrice = sizes.length > 0 ? sizes[0].price : parseFloat(product.price);
+                const baseEffective = sizes.length > 0 ? sizes[0].effective_price : parseFloat(product.effective_price);
+                return {
+                    id: product.id,
+                    name: product.name,
+                    slug: product.slug,
+                    category: product.category_name,
+                    price: basePrice,
+                    effectivePrice: baseEffective,
+                    discount: parseFloat(product.effective_discount),
+                    image: product.image_url || categoryImageMap[product.category_name] || '/assets/namkeen.png',
+                    description: product.short_description || '',
+                    in_stock: product.in_stock,
+                    stock_quantity: product.stock_quantity,
+                    isFeatured: product.is_featured,
+                    weight: product.weight || '',
+                    sizes,
+                };
+            });
 
             setProducts(transformedProducts);
 
-            // Sync cart prices against fresh product data so discounts
-            // (added or removed) are reflected immediately.
+            // Sync cart prices against fresh product data so discounts are reflected.
             setCart(prevCart => prevCart.map(cartItem => {
                 const fresh = transformedProducts.find(p => p.id === cartItem.id);
                 if (!fresh) return cartItem;
+                // If cart item has a size, find the fresh size price
+                if (cartItem.selectedSizeId) {
+                    const freshSize = fresh.sizes.find(s => s.id === cartItem.selectedSizeId);
+                    if (freshSize) {
+                        return {
+                            ...cartItem,
+                            price: freshSize.price,
+                            effectivePrice: freshSize.effective_price,
+                            discount: fresh.discount,
+                        };
+                    }
+                }
                 return {
                     ...cartItem,
                     price: fresh.price,
@@ -163,30 +186,45 @@ export const ProductProvider = ({ children }) => {
     }, [cart]);
 
     // Cart Operations
-    const addToCart = (product) => {
+    // selectedSize: { id, size_name, price, effective_price } or null
+    const addToCart = (product, selectedSize = null) => {
+        const cartKey = `${product.id}-${selectedSize?.id ?? 0}`;
+        const itemPrice = selectedSize ? selectedSize.price : product.price;
+        const itemEffective = selectedSize ? selectedSize.effective_price : product.effectivePrice;
+        const displayName = selectedSize ? `${product.name} (${selectedSize.size_name})` : product.name;
+
         setCart(prevCart => {
-            const existingItem = prevCart.find(item => item.id === product.id);
+            const existingItem = prevCart.find(item => item.cartKey === cartKey);
             if (existingItem) {
                 return prevCart.map(item =>
-                    item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+                    item.cartKey === cartKey ? { ...item, quantity: item.quantity + 1 } : item
                 );
             }
-            return [...prevCart, { ...product, quantity: 1 }];
+            return [...prevCart, {
+                ...product,
+                cartKey,
+                displayName,
+                price: itemPrice,
+                effectivePrice: itemEffective,
+                selectedSizeId: selectedSize?.id ?? null,
+                selectedSizeName: selectedSize?.size_name ?? null,
+                quantity: 1,
+            }];
         });
     };
 
-    const removeFromCart = (productId) => {
-        setCart(prevCart => prevCart.filter(item => item.id !== productId));
+    const removeFromCart = (cartKey) => {
+        setCart(prevCart => prevCart.filter(item => item.cartKey !== cartKey));
     };
 
-    const updateQuantity = (productId, newQuantity) => {
+    const updateQuantity = (cartKey, newQuantity) => {
         if (newQuantity < 1) {
-            removeFromCart(productId);
+            removeFromCart(cartKey);
             return;
         }
         setCart(prevCart =>
             prevCart.map(item =>
-                item.id === productId ? { ...item, quantity: newQuantity } : item
+                item.cartKey === cartKey ? { ...item, quantity: newQuantity } : item
             )
         );
     };
@@ -199,7 +237,8 @@ export const ProductProvider = ({ children }) => {
             // Transform cart items to API format
             const items = cart.map(item => ({
                 product: item.id,
-                quantity: item.quantity
+                quantity: item.quantity,
+                ...(item.selectedSizeId ? { size_id: item.selectedSizeId } : {}),
             }));
 
             // Create order via API

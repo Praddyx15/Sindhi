@@ -56,37 +56,37 @@ const Layout = ({ children }) => {
                                     </div>
                                 ) : (
                                     cart.map(item => (
-                                        <div key={item.id} className="flex gap-4 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                                        <div key={item.cartKey} className="flex gap-4 p-3 bg-gray-50 rounded-xl border border-gray-100">
                                             <div className="w-20 h-20 bg-white rounded-lg p-2 flex-shrink-0">
                                                 <img
                                                     src={`/assets/${item.image.split('/').pop()}`}
-                                                    alt={item.name}
+                                                    alt={item.displayName || item.name}
                                                     className="w-full h-full object-contain"
                                                 />
                                             </div>
                                             <div className="flex-1 min-w-0 flex flex-col justify-between">
                                                 <div>
-                                                    <h3 className="text-sm font-medium text-gray-900 line-clamp-2">{item.name}</h3>
-                                                    <p className="text-sm text-gray-500 mt-1">₹{item.price}</p>
+                                                    <h3 className="text-sm font-medium text-gray-900 line-clamp-2">{item.displayName || item.name}</h3>
+                                                    <p className="text-sm text-gray-500 mt-1">₹{item.effectivePrice || item.price}</p>
                                                 </div>
                                                 <div className="flex items-center justify-between mt-2">
                                                     <div className="flex items-center gap-3 bg-white border border-gray-200 rounded-lg px-2 py-1">
                                                         <button
-                                                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                            onClick={() => updateQuantity(item.cartKey, item.quantity - 1)}
                                                             className="text-gray-500 hover:text-orange-600"
                                                         >
                                                             <Minus size={14} />
                                                         </button>
                                                         <span className="text-sm font-medium w-4 text-center">{item.quantity}</span>
                                                         <button
-                                                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                            onClick={() => updateQuantity(item.cartKey, item.quantity + 1)}
                                                             className="text-gray-500 hover:text-orange-600"
                                                         >
                                                             <Plus size={14} />
                                                         </button>
                                                     </div>
                                                     <button
-                                                        onClick={() => removeFromCart(item.id)}
+                                                        onClick={() => removeFromCart(item.cartKey)}
                                                         className="text-xs text-red-500 hover:text-red-700 font-medium"
                                                     >
                                                         Remove

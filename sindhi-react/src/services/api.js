@@ -183,6 +183,34 @@ export const getOrder = async (orderNumber) => {
     }
 };
 
+/**
+ * List all orders — admin only
+ * @param {Object} params - status, search, ordering
+ */
+export const getOrders = async (params = {}) => {
+    try {
+        const response = await api.get('/orders/', { params });
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to fetch orders');
+    }
+};
+
+/**
+ * Update order status / admin notes — admin only
+ * @param {string} orderNumber
+ * @param {Object} data - { status, admin_notes, delivery_date }
+ */
+export const updateOrderStatus = async (orderNumber, data) => {
+    try {
+        const response = await api.patch(`/orders/${orderNumber}/`, data);
+        return response.data;
+    } catch (error) {
+        if (error.response?.data) throw error.response.data;
+        throw new Error('Failed to update order');
+    }
+};
+
 // ==================== ADMIN API ====================
 
 /**

@@ -11,7 +11,10 @@ import {
     Upload,
     Loader2,
     AlertCircle,
-    CheckCircle
+    CheckCircle,
+    Square,
+    CheckSquare,
+    Minus as MinusIcon,
 } from 'lucide-react';
 import { createProduct, updateProduct, deleteProduct, getCategories } from '../../services/api';
 
@@ -25,16 +28,18 @@ const ProductManagement = () => {
     const [formData, setFormData] = useState({
         name: '',
         description: '',
-        price: '',
         category: '',
         in_stock: true,
         stock_quantity: '',
         image: null
     });
+    const [sizes, setSizes] = useState([{ size_name: '', price: '' }]);
     const [imagePreview, setImagePreview] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [selectedIds, setSelectedIds] = useState(new Set());
+    const [bulkDeleteConfirm, setBulkDeleteConfirm] = useState(false);
 
     useEffect(() => {
         getCategories({ page_size: 100 })
@@ -76,12 +81,12 @@ const ProductManagement = () => {
         setFormData({
             name: '',
             description: '',
-            price: '',
             category: '',
             in_stock: true,
             stock_quantity: '',
             image: null
         });
+        setSizes([{ size_name: '', price: '' }]);
         setImagePreview(null);
         setError('');
         setSuccess('');
@@ -94,21 +99,40 @@ const ProductManagement = () => {
         setFormData({
             name: product.name,
             description: product.description || '',
-            price: product.price,
             category: product.category,
             in_stock: product.in_stock,
             stock_quantity: product.stock_quantity || '',
             image: null
         });
+        setSizes(
+            product.sizes && product.sizes.length > 0
+                ? product.sizes.map(s => ({ size_name: s.size_name, price: String(s.price) }))
+                : [{ size_name: '', price: '' }]
+        );
         setImagePreview(product.image);
         setError('');
         setSuccess('');
         setShowModal(true);
     };
 
+    // Sizes helpers
+    const updateSize = (index, field, value) => {
+        setSizes(prev => prev.map((s, i) => i === index ? { ...s, [field]: value } : s));
+    };
+    const addSize = () => setSizes(prev => [...prev, { size_name: '', price: '' }]);
+    const removeSize = (index) => setSizes(prev => prev.filter((_, i) => i !== index));
+
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate sizes
+        const validSizes = sizes.filter(s => s.size_name.trim() && s.price !== '');
+        if (validSizes.length === 0) {
+            setError('At least one size with a name and price is required.');
+            return;
+        }
+
         setLoading(true);
         setError('');
         setSuccess('');
@@ -117,9 +141,11 @@ const ProductManagement = () => {
             const formDataToSend = new FormData();
             formDataToSend.append('name', formData.name);
             formDataToSend.append('description', formData.description);
-            formDataToSend.append('price', formData.price);
             formDataToSend.append('category', formData.category);
             formDataToSend.append('in_stock', formData.in_stock);
+            formDataToSend.append('sizes_input', JSON.stringify(
+                validSizes.map(s => ({ size_name: s.size_name.trim(), price: parseFloat(s.price) }))
+            ));
             if (formData.stock_quantity) {
                 formDataToSend.append('stock_quantity', formData.stock_quantity);
             }
@@ -135,10 +161,8 @@ const ProductManagement = () => {
                 setSuccess('Product created successfully!');
             }
 
-            // Refresh products list
             await fetchProducts();
 
-            // Close modal after short delay
             setTimeout(() => {
                 setShowModal(false);
                 setSuccess('');
@@ -161,6 +185,42 @@ const ProductManagement = () => {
             setTimeout(() => setSuccess(''), 3000);
         } catch (err) {
             setError(err.message || 'Failed to delete product');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Bulk selection helpers
+    const allVisibleIds = filteredProducts.map(p => p.id);
+    const allSelected = allVisibleIds.length > 0 && allVisibleIds.every(id => selectedIds.has(id));
+    const someSelected = allVisibleIds.some(id => selectedIds.has(id)) && !allSelected;
+
+    const toggleSelectAll = () => {
+        setSelectedIds(allSelected ? new Set() : new Set(allVisibleIds));
+    };
+
+    const toggleSelectOne = (id) => {
+        setSelectedIds(prev => {
+            const next = new Set(prev);
+            next.has(id) ? next.delete(id) : next.add(id);
+            return next;
+        });
+    };
+
+    // Handle bulk deletion
+    const handleBulkDelete = async () => {
+        const count = selectedIds.size;
+        const ids = [...selectedIds];
+        setLoading(true);
+        setBulkDeleteConfirm(false);
+        try {
+            await Promise.all(ids.map(id => deleteProduct(id)));
+            setSelectedIds(new Set());
+            await fetchProducts();
+            setSuccess(`${count} product(s) deleted successfully!`);
+            setTimeout(() => setSuccess(''), 3000);
+        } catch (err) {
+            setError(err.message || 'Failed to delete selected products');
         } finally {
             setLoading(false);
         }
@@ -212,12 +272,51 @@ const ProductManagement = () => {
                     </div>
                 </div>
 
+                {/* Bulk Action Bar */}
+                {selectedIds.size > 0 && (
+                    <div className="bg-primary/5 border border-primary/20 rounded-xl px-5 py-3 flex items-center justify-between gap-4">
+                        <span className="text-sm font-semibold text-primary">
+                            {selectedIds.size} product{selectedIds.size > 1 ? 's' : ''} selected
+                        </span>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setSelectedIds(new Set())}
+                                className="px-3 py-1.5 text-sm text-neutral-600 hover:text-neutral-800 hover:bg-neutral-100 rounded-lg transition-colors"
+                            >
+                                Clear
+                            </button>
+                            <button
+                                onClick={() => setBulkDeleteConfirm(true)}
+                                disabled={loading}
+                                className="flex items-center gap-1.5 px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
+                            >
+                                <Trash2 className="h-3.5 w-3.5" />
+                                Delete {selectedIds.size} product{selectedIds.size > 1 ? 's' : ''}
+                            </button>
+                        </div>
+                    </div>
+                )}
+
                 {/* Products Table */}
                 <div className="bg-white rounded-2xl shadow-lg border border-neutral-200/50 overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead className="bg-neutral-50 border-b border-neutral-200">
                                 <tr>
+                                    <th className="px-4 py-4 w-10">
+                                        <button
+                                            onClick={toggleSelectAll}
+                                            className="text-neutral-400 hover:text-primary transition-colors"
+                                            title={allSelected ? 'Deselect all' : 'Select all'}
+                                        >
+                                            {allSelected
+                                                ? <CheckSquare className="h-5 w-5 text-primary" />
+                                                : someSelected
+                                                    ? <CheckSquare className="h-5 w-5 text-primary/50" />
+                                                    : <Square className="h-5 w-5" />
+                                            }
+                                        </button>
+                                    </th>
                                     <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-700">Image</th>
                                     <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-700">Name</th>
                                     <th className="px-6 py-4 text-left text-sm font-semibold text-neutral-700">Category</th>
@@ -230,20 +329,34 @@ const ProductManagement = () => {
                             <tbody className="divide-y divide-neutral-200">
                                 {contextLoading ? (
                                     <tr>
-                                        <td colSpan="7" className="px-6 py-12 text-center">
+                                        <td colSpan="8" className="px-6 py-12 text-center">
                                             <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />
                                             <p className="text-neutral-600">Loading products...</p>
                                         </td>
                                     </tr>
                                 ) : filteredProducts.length === 0 ? (
                                     <tr>
-                                        <td colSpan="7" className="px-6 py-12 text-center text-neutral-600">
+                                        <td colSpan="8" className="px-6 py-12 text-center text-neutral-600">
                                             No products found
                                         </td>
                                     </tr>
                                 ) : (
                                     filteredProducts.map((product) => (
-                                        <tr key={product.id} className="hover:bg-neutral-50 transition-colors">
+                                        <tr
+                                            key={product.id}
+                                            className={`hover:bg-neutral-50 transition-colors ${selectedIds.has(product.id) ? 'bg-primary/5' : ''}`}
+                                        >
+                                            <td className="px-4 py-4">
+                                                <button
+                                                    onClick={() => toggleSelectOne(product.id)}
+                                                    className="text-neutral-400 hover:text-primary transition-colors"
+                                                >
+                                                    {selectedIds.has(product.id)
+                                                        ? <CheckSquare className="h-5 w-5 text-primary" />
+                                                        : <Square className="h-5 w-5" />
+                                                    }
+                                                </button>
+                                            </td>
                                             <td className="px-6 py-4">
                                                 <div className="w-16 h-16 rounded-lg overflow-hidden bg-neutral-100">
                                                     {product.image ? (
@@ -370,41 +483,74 @@ const ProductManagement = () => {
                                 />
                             </div>
 
-                            {/* Price and Category */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-semibold text-neutral-700 mb-2">
-                                        Price (₹) *
+                            {/* Category */}
+                            <div>
+                                <label className="block text-sm font-semibold text-neutral-700 mb-2">
+                                    Category *
+                                </label>
+                                <select
+                                    name="category"
+                                    value={formData.category}
+                                    onChange={handleInputChange}
+                                    required
+                                    className="w-full px-4 py-3 rounded-xl border-2 border-neutral-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all bg-white"
+                                >
+                                    <option value="">Select a category...</option>
+                                    {categories.map(cat => (
+                                        <option key={cat.id} value={cat.name}>{cat.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* Sizes */}
+                            <div>
+                                <div className="flex items-center justify-between mb-2">
+                                    <label className="text-sm font-semibold text-neutral-700">
+                                        Sizes &amp; Prices *
                                     </label>
-                                    <input
-                                        type="number"
-                                        name="price"
-                                        value={formData.price}
-                                        onChange={handleInputChange}
-                                        required
-                                        min="0"
-                                        step="0.01"
-                                        className="w-full px-4 py-3 rounded-xl border-2 border-neutral-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all"
-                                        placeholder="0.00"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-neutral-700 mb-2">
-                                        Category *
-                                    </label>
-                                    <select
-                                        name="category"
-                                        value={formData.category}
-                                        onChange={handleInputChange}
-                                        required
-                                        className="w-full px-4 py-3 rounded-xl border-2 border-neutral-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all bg-white"
+                                    <button
+                                        type="button"
+                                        onClick={addSize}
+                                        className="flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary-600 transition-colors"
                                     >
-                                        <option value="">Select a category...</option>
-                                        {categories.map(cat => (
-                                            <option key={cat.id} value={cat.name}>{cat.name}</option>
-                                        ))}
-                                    </select>
+                                        <Plus className="h-3.5 w-3.5" /> Add Size
+                                    </button>
                                 </div>
+                                <div className="space-y-2">
+                                    {sizes.map((size, index) => (
+                                        <div key={index} className="flex items-center gap-2">
+                                            <input
+                                                type="text"
+                                                placeholder="Size (e.g. 250g)"
+                                                value={size.size_name}
+                                                onChange={(e) => updateSize(index, 'size_name', e.target.value)}
+                                                className="flex-1 px-3 py-2.5 rounded-xl border-2 border-neutral-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none text-sm transition-all"
+                                            />
+                                            <div className="relative w-32">
+                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 text-sm">₹</span>
+                                                <input
+                                                    type="number"
+                                                    placeholder="Price"
+                                                    value={size.price}
+                                                    onChange={(e) => updateSize(index, 'price', e.target.value)}
+                                                    min="0"
+                                                    step="0.01"
+                                                    className="w-full pl-7 pr-3 py-2.5 rounded-xl border-2 border-neutral-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none text-sm transition-all"
+                                                />
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => removeSize(index)}
+                                                disabled={sizes.length === 1}
+                                                className="p-2 text-red-400 hover:text-red-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                                title="Remove size"
+                                            >
+                                                <MinusIcon className="h-4 w-4" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                                <p className="text-xs text-neutral-400 mt-1.5">At least one size is required. The lowest price will be used as the display price.</p>
                             </div>
 
                             {/* Stock Quantity */}
@@ -512,6 +658,43 @@ const ProductManagement = () => {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Bulk Delete Confirmation Modal */}
+            {bulkDeleteConfirm && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-2xl max-w-md w-full p-6">
+                        <div className="text-center mb-6">
+                            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Trash2 className="h-8 w-8 text-red-600" />
+                            </div>
+                            <h3 className="text-xl font-bold text-neutral-800 mb-2">
+                                Delete {selectedIds.size} Product{selectedIds.size > 1 ? 's' : ''}?
+                            </h3>
+                            <p className="text-neutral-600">
+                                This will permanently delete {selectedIds.size > 1 ? 'these products' : 'this product'}. This action cannot be undone.
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={handleBulkDelete}
+                                disabled={loading}
+                                className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                            >
+                                {loading
+                                    ? <><Loader2 className="h-5 w-5 animate-spin" /><span>Deleting...</span></>
+                                    : <span>Delete {selectedIds.size} Product{selectedIds.size > 1 ? 's' : ''}</span>
+                                }
+                            </button>
+                            <button
+                                onClick={() => setBulkDeleteConfirm(false)}
+                                className="flex-1 px-6 py-3 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 rounded-xl font-semibold transition-colors"
+                            >
+                                Cancel
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

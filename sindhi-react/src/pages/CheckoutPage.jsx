@@ -301,10 +301,10 @@ const CheckoutPage = () => {
                             <h2 className="text-lg font-bold text-neutral-800 mb-4">Order Summary</h2>
                             <div className="space-y-4 mb-6 max-h-60 overflow-y-auto custom-scrollbar pr-2">
                                 {cart.map(item => (
-                                    <div key={item.id} className="flex justify-between text-sm">
+                                    <div key={item.cartKey} className="flex justify-between text-sm">
                                         <div className="flex gap-2">
                                             <span className="text-neutral-500">{item.quantity}x</span>
-                                            <span className="text-neutral-800 line-clamp-1">{item.name}</span>
+                                            <span className="text-neutral-800 line-clamp-1">{item.displayName || item.name}</span>
                                         </div>
                                         <div className="text-right">
                                             <span className="font-medium">₹{(item.effectivePrice * item.quantity).toFixed(0)}</span>

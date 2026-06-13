@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useProductContext } from '../../context/ProductContext';
 import AdminLayout from '../../components/admin/AdminLayout';
 import {
     Tag, Plus, Edit2, Trash2, X, Loader2, AlertCircle, CheckCircle,
-    Zap, ZapOff, Package, FolderOpen, ShoppingBag, Calendar
+    Zap, ZapOff, Package, FolderOpen, ShoppingBag, Calendar, PowerOff
 } from 'lucide-react';
 import {
     getFestiveOffers, createFestiveOffer, updateFestiveOffer,
@@ -22,6 +23,7 @@ const EMPTY_FORM = {
 };
 
 const FestiveOffers = () => {
+    const { fetchProducts } = useProductContext();
     const [offers, setOffers] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
     const [allCategories, setAllCategories] = useState([]);
@@ -32,6 +34,7 @@ const FestiveOffers = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingOffer, setEditingOffer] = useState(null);
     const [deleteConfirm, setDeleteConfirm] = useState(null);
+    const [removeConfirm, setRemoveConfirm] = useState(null);
     const [formData, setFormData] = useState(EMPTY_FORM);
 
     const fetchData = async () => {
@@ -132,7 +135,7 @@ const FestiveOffers = () => {
         try {
             await applyFestiveOffer(offer.id);
             showSuccess(`"${offer.name}" applied! Products updated.`);
-            await fetchData();
+            await Promise.all([fetchData(), fetchProducts()]);
         } catch {
             setError('Failed to apply offer');
         } finally {
@@ -145,7 +148,7 @@ const FestiveOffers = () => {
         try {
             await deactivateFestiveOffer(offer.id);
             showSuccess(`"${offer.name}" deactivated.`);
-            await fetchData();
+            await Promise.all([fetchData(), fetchProducts()]);
         } catch {
             setError('Failed to deactivate offer');
         } finally {
@@ -323,17 +326,16 @@ const FestiveOffers = () => {
                                                         <Zap className="h-3.5 w-3.5" />
                                                         Apply
                                                     </button>
-                                                    {/* Deactivate */}
-                                                    {offer.is_active && (
-                                                        <button
-                                                            onClick={() => handleDeactivate(offer)}
-                                                            disabled={loading}
-                                                            className="p-2 hover:bg-neutral-100 text-neutral-500 rounded-lg transition-colors"
-                                                            title="Deactivate offer"
-                                                        >
-                                                            <ZapOff className="h-4 w-4" />
-                                                        </button>
-                                                    )}
+                                                    {/* Remove Offer */}
+                                                    <button
+                                                        onClick={() => setRemoveConfirm(offer)}
+                                                        disabled={loading}
+                                                        className="flex items-center gap-1 px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-semibold rounded-lg transition-all disabled:opacity-50"
+                                                        title="Remove offer and reset product prices"
+                                                    >
+                                                        <PowerOff className="h-3.5 w-3.5" />
+                                                        Remove
+                                                    </button>
                                                     {/* Edit */}
                                                     <button
                                                         onClick={() => openEdit(offer)}
@@ -552,6 +554,43 @@ const FestiveOffers = () => {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Remove Offer Confirmation */}
+            {removeConfirm && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-2xl max-w-md w-full p-6">
+                        <div className="text-center mb-6">
+                            <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <PowerOff className="h-8 w-8 text-amber-600" />
+                            </div>
+                            <h3 className="text-xl font-bold text-neutral-800 mb-2">Remove Offer?</h3>
+                            <p className="text-neutral-600">
+                                This will reset all discounts applied by <strong>"{removeConfirm.name}"</strong> back
+                                to 0 and mark the offer as inactive. Product prices will be restored.
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={async () => {
+                                    const offer = removeConfirm;
+                                    setRemoveConfirm(null);
+                                    await handleDeactivate(offer);
+                                }}
+                                disabled={loading}
+                                className="flex-1 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                            >
+                                {loading ? <><Loader2 className="h-5 w-5 animate-spin" /><span>Removing...</span></> : <><PowerOff className="h-4 w-4" /><span>Remove Offer</span></>}
+                            </button>
+                            <button
+                                onClick={() => setRemoveConfirm(null)}
+                                className="flex-1 px-6 py-3 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 rounded-xl font-semibold transition-colors"
+                            >
+                                Cancel
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

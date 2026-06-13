@@ -14,6 +14,7 @@ const ProductsPage = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [maxPrice, setMaxPrice] = useState(5000);
     const [selectedWeights, setSelectedWeights] = useState([]);
+    const [sizeSelectorProduct, setSizeSelectorProduct] = useState(null);
 
     // Derived Data
     const categories = ['All', ...new Set(products.map(p => p.category))];
@@ -77,6 +78,14 @@ const ProductsPage = () => {
         );
     };
 
+    const handleAddToCart = (product) => {
+        if (!product.sizes || product.sizes.length <= 1) {
+            addToCart(product, product.sizes?.[0] ?? null);
+        } else {
+            setSizeSelectorProduct(product);
+        }
+    };
+
     // Helper Component for Collapsible Sections
     const CollapsibleSection = ({ title, children, defaultOpen = true }) => {
         const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -97,6 +106,7 @@ const ProductsPage = () => {
     };
 
     return (
+        <>
         <div className="min-h-screen bg-bg-primary pt-24 pb-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -246,11 +256,29 @@ const ProductsPage = () => {
                                             <h3 className="font-bold text-neutral-800 mb-1 line-clamp-2">{product.name}</h3>
                                             <p className="text-xs text-neutral-500 mb-3">{product.category}</p>
 
-                                            <div className="mt-auto flex items-center justify-between">
-                                                <span className="text-lg font-bold text-primary">₹{product.price}</span>
+                                            <div className="mt-auto flex items-center justify-between gap-2">
+                                                <div>
+                                                    {product.discount > 0 ? (
+                                                        <>
+                                                            <div className="flex items-center gap-1.5 mb-0.5">
+                                                                <span className="text-xs text-neutral-400 line-through">₹{product.price}</span>
+                                                                <span className="text-xs font-bold text-green-700 bg-green-100 px-1.5 py-0.5 rounded-full">
+                                                                    {Math.round(product.discount)}% OFF
+                                                                </span>
+                                                            </div>
+                                                            <span className="text-lg font-bold text-primary">
+                                                                {product.sizes?.length > 1 ? 'From ' : ''}₹{product.effectivePrice}
+                                                            </span>
+                                                        </>
+                                                    ) : (
+                                                        <span className="text-lg font-bold text-primary">
+                                                            {product.sizes?.length > 1 ? 'From ' : ''}₹{product.price}
+                                                        </span>
+                                                    )}
+                                                </div>
                                                 <button
-                                                    onClick={() => addToCart(product)}
-                                                    className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary-600 transition-colors shadow-sm"
+                                                    onClick={() => handleAddToCart(product)}
+                                                    className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary-600 transition-colors shadow-sm flex-shrink-0"
                                                     disabled={!product.in_stock}
                                                 >
                                                     +
@@ -278,6 +306,55 @@ const ProductsPage = () => {
                 </div>
             </div>
         </div>
+
+        {/* Size Selector Popup */}
+        {sizeSelectorProduct && (
+            <div
+                className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+                onClick={() => setSizeSelectorProduct(null)}
+            >
+                <div
+                    className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-bold text-neutral-800">Select Size</h3>
+                        <button
+                            onClick={() => setSizeSelectorProduct(null)}
+                            className="p-1.5 hover:bg-neutral-100 rounded-lg transition-colors"
+                        >
+                            <X size={18} />
+                        </button>
+                    </div>
+                    <p className="text-sm text-neutral-500 mb-4 line-clamp-1">{sizeSelectorProduct.name}</p>
+                    <div className="space-y-2">
+                        {sizeSelectorProduct.sizes.map((size) => (
+                            <button
+                                key={size.id}
+                                onClick={() => {
+                                    addToCart(sizeSelectorProduct, size);
+                                    setSizeSelectorProduct(null);
+                                }}
+                                className="w-full flex items-center justify-between px-4 py-3 border-2 border-neutral-200 hover:border-primary hover:bg-primary/5 rounded-xl transition-all group"
+                            >
+                                <span className="font-semibold text-neutral-800 group-hover:text-primary">{size.size_name}</span>
+                                <div className="text-right">
+                                    {sizeSelectorProduct.discount > 0 ? (
+                                        <div className="flex flex-col items-end">
+                                            <span className="text-xs text-neutral-400 line-through">₹{size.price}</span>
+                                            <span className="font-bold text-primary">₹{size.effective_price}</span>
+                                        </div>
+                                    ) : (
+                                        <span className="font-bold text-primary">₹{size.price}</span>
+                                    )}
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        )}
+        </>
     );
 };
 
