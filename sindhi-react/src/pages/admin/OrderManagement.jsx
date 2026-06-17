@@ -249,7 +249,7 @@ const OrderManagement = () => {
                                                 <StatusBadge status={order.status} />
                                             </td>
                                             <td className="px-6 py-4 text-sm text-neutral-600">
-                                                {formatDate(order.created_at)}
+                                                {formatDateTime(order.created_at)}
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 <button
