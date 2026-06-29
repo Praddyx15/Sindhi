@@ -269,6 +269,7 @@ export const verifyAdminSession = async () => {
         const response = await api.get('/admin/verify/');
         return response.data;
     } catch (error) {
+        setAuthToken(null);
         return { authenticated: false };
     }
 };

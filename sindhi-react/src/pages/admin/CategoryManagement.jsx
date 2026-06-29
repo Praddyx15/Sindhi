@@ -380,12 +380,12 @@ const CategoryManagement = () => {
                                         <div>
                                             <Upload className="h-12 w-12 text-neutral-400 mx-auto mb-3" />
                                             <p className="text-neutral-600 mb-2">Click to upload or drag and drop</p>
-                                            <p className="text-sm text-neutral-500">PNG, JPG up to 10MB</p>
+                                            <p className="text-sm text-neutral-500">PNG, JPG, WEBP up to 10MB</p>
                                         </div>
                                     )}
                                     <input
                                         type="file"
-                                        accept="image/*"
+                                        accept="image/jpeg,image/png,image/webp,image/gif"
                                         onChange={handleImageChange}
                                         className="hidden"
                                         id="category-image-upload"
